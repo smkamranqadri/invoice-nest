@@ -1,16 +1,12 @@
-import type { NextConfig } from "next";
 import withPWA from "next-pwa";
 
-const nextConfig: NextConfig = withPWA({
-  pwa: {
-    dest: "public",
-    register: true,
-    skipWaiting: true,
-    disable: process.env.NODE_ENV === "development",
-  },
-  experimental: {
-    serverComponentsExternalPackages: ["@prisma/client"],
-  },
-});
+const nextConfig = {
+  serverExternalPackages: ["@prisma/client"],
+};
 
-export default nextConfig;
+export default withPWA({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === "development",
+})(nextConfig);

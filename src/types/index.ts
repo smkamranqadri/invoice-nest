@@ -4,7 +4,7 @@ export interface User {
   email: string;
   name: string;
   role: 'ADMIN' | 'USER';
-  preferences?: Record<string, any>;
+  preferences?: Record<string, unknown>;
   isActive: boolean;
   emailVerified: boolean;
   createdAt: Date;
@@ -26,7 +26,7 @@ export interface Company {
   website?: string;
   taxId?: string;
   registrationNumber?: string;
-  settings?: Record<string, any>;
+  settings?: Record<string, unknown>;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -122,7 +122,7 @@ export interface Setting {
 }
 
 // API Response types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   message?: string;
