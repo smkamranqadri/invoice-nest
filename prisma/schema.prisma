@@ -1,0 +1,184 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  password      String
+  role          Role     @default(USER)
+  preferences   Json?
+  isActive      Boolean  @default(true)
+  emailVerified Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Company {
+  id                  String   @id @default(cuid())
+  name                String
+  logo                String?
+  address             String?
+  city                String?
+  state               String?
+  country             String   @default("US")
+  zipCode             String?
+  phone               String?
+  email               String?
+  website             String?
+  taxId               String?
+  registrationNumber  String?
+  settings            Json?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("companies")
+}
+
+model Customer {
+  id           String       @id @default(cuid())
+  displayName  String
+  contactName  String?
+  email        String?
+  phone        String?
+  website      String?
+  address      String?
+  city         String?
+  state        String?
+  country      String       @default("US")
+  zipCode      String?
+  status       CustomerStatus @default(ACTIVE)
+  isActive     Boolean      @default(true)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Relations
+  invoices     Invoice[]
+  payments     Payment[]
+
+  @@map("customers")
+}
+
+model Invoice {
+  id             String        @id @default(cuid())
+  number         String        @unique
+  customerId     String
+  status         InvoiceStatus @default(DRAFT)
+  issueDate      DateTime
+  dueDate        DateTime
+  subtotal       Float
+  taxAmount      Float         @default(0)
+  discountAmount Float         @default(0)
+  total          Float
+  notes          String?
+  isActive       Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  // Relations
+  customer       Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items          InvoiceItem[]
+  payments       Payment[]
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  description String
+  quantity    Float
+  price       Float
+  taxRate     Float   @default(0)
+  discount    Float   @default(0)
+  total       Float
+  sortOrder   Int     @default(0)
+
+  // Relations
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@map("invoice_items")
+}
+
+model Payment {
+  id         String        @id @default(cuid())
+  number     String        @unique
+  customerId String
+  invoiceId  String?
+  amount     Float
+  method     String
+  date       DateTime
+  notes      String?
+  status     PaymentStatus @default(PENDING)
+  isActive   Boolean       @default(true)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  // Relations
+  customer   Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  invoice    Invoice?      @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+
+  @@map("payments")
+}
+
+model TaxType {
+  id         String   @id @default(cuid())
+  name       String
+  rate       Float
+  isCompound Boolean  @default(false)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("tax_types")
+}
+
+model Setting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  type        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// Enums
+enum Role {
+  ADMIN
+  USER
+}
+
+enum CustomerStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
