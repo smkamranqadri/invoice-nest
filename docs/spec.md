@@ -2,8 +2,8 @@
 
 **Project Name**: InvoiceNest  
 **Version**: 1.0  
-**Status**: MVP Development (Phase 1 Complete, Phase 2 In Progress)  
-**Last Updated**: January 2024
+**Status**: MVP Development (Phase 1 & 2 Complete, Phase 3 In Progress)  
+**Last Updated**: August 2025
 
 ---
 
@@ -20,10 +20,10 @@ InvoiceNest is an open source, web-based invoicing and financial management syst
 ### 1. **User Authentication & Authorization** ✅ IMPLEMENTED
 
 - First-time setup with admin account creation ✅
-- Login/logout functionality with JWT tokens ✅
+- Login/logout functionality with Better Auth ✅
 - Password reset for existing users 🚧 Planned
 - Role-based access control (Admin, User) ✅
-- JWT-based session management with configurable expiration ✅
+- Session-based authentication with Better Auth ✅
 
 ### 2. **Account Settings** 🚧 PLANNED
 
@@ -142,7 +142,7 @@ InvoiceNest is an open source, web-based invoicing and financial management syst
 - **Runtime**: Node.js (Next.js API routes) ✅
 - **Database**: SQLite (development), PostgreSQL (production) ✅
 - **ORM**: Prisma ✅
-- **Authentication**: JWT with jsonwebtoken ✅
+- **Authentication**: Better Auth ✅
 - **PDF Generation**: PDFKit / Puppeteer 🚧 Planned
 - **Validation**: Zod ✅
 
@@ -161,110 +161,159 @@ InvoiceNest is an open source, web-based invoicing and financial management syst
 
 ### User ✅
 
-- `id` (UUID, Primary Key)
+- `id` (String, Primary Key, CUID)
 - `name` (String)
 - `email` (String, Unique)
-- `password` (String, Hashed)
 - `role` (Enum: ADMIN, USER)
+- `preferences` (JSON, Optional)
 - `isActive` (Boolean)
+- `emailVerified` (Boolean)
+- `image` (String, Optional)
 - `createdAt` (DateTime)
 - `updatedAt` (DateTime)
 
 ### Company ✅
 
-- `id` (UUID, Primary Key)
+- `id` (String, Primary Key, CUID)
 - `name` (String)
-- `email` (String)
-- `phone` (String)
-- `address` (String)
-- `city` (String)
-- `state` (String)
-- `country` (String)
-- `zipCode` (String)
-- `taxId` (String)
-- `logo` (String, URL)
+- `logo` (String, Optional)
+- `address` (String, Optional)
+- `city` (String, Optional)
+- `state` (String, Optional)
+- `country` (String, Default: "US")
+- `zipCode` (String, Optional)
+- `phone` (String, Optional)
+- `email` (String, Optional)
+- `website` (String, Optional)
+- `taxId` (String, Optional)
+- `registrationNumber` (String, Optional)
+- `settings` (JSON, Optional)
+- `createdBy` (String, Foreign Key to User)
 - `createdAt` (DateTime)
 - `updatedAt` (DateTime)
 
 ### Customer ✅
 
-- `id` (UUID, Primary Key)
+- `id` (String, Primary Key, CUID)
 - `displayName` (String)
-- `contactName` (String)
-- `email` (String)
-- `phone` (String)
-- `address` (String)
-- `city` (String)
-- `state` (String)
-- `country` (String)
-- `zipCode` (String)
+- `contactName` (String, Optional)
+- `email` (String, Optional)
+- `phone` (String, Optional)
+- `website` (String, Optional)
+- `address` (String, Optional)
+- `city` (String, Optional)
+- `state` (String, Optional)
+- `country` (String, Default: "US")
+- `zipCode` (String, Optional)
 - `status` (Enum: ACTIVE, INACTIVE, ARCHIVED)
+- `isActive` (Boolean)
+- `createdBy` (String, Foreign Key to User)
 - `createdAt` (DateTime)
 - `updatedAt` (DateTime)
 
 ### Invoice ✅
 
-- `id` (UUID, Primary Key)
+- `id` (String, Primary Key, CUID)
 - `number` (String, Unique)
-- `customerId` (UUID, Foreign Key)
+- `customerId` (String, Foreign Key to Customer)
 - `status` (Enum: DRAFT, SENT, PAID, OVERDUE, CANCELLED)
-- `issueDate` (Date)
-- `dueDate` (Date)
-- `subtotal` (Decimal)
-- `taxAmount` (Decimal)
-- `discountAmount` (Decimal)
-- `total` (Decimal)
-- `notes` (Text)
+- `issueDate` (DateTime)
+- `dueDate` (DateTime)
+- `subtotal` (Float)
+- `taxAmount` (Float, Default: 0)
+- `discountAmount` (Float, Default: 0)
+- `total` (Float)
+- `notes` (String, Optional)
+- `isActive` (Boolean)
+- `createdBy` (String, Foreign Key to User)
 - `createdAt` (DateTime)
 - `updatedAt` (DateTime)
 
 ### InvoiceItem ✅
 
-- `id` (UUID, Primary Key)
-- `invoiceId` (UUID, Foreign Key)
+- `id` (String, Primary Key, CUID)
+- `invoiceId` (String, Foreign Key to Invoice)
 - `description` (String)
-- `quantity` (Decimal)
-- `price` (Decimal)
-- `taxRate` (Decimal)
-- `discountRate` (Decimal)
-- `sortOrder` (Integer)
-- `createdAt` (DateTime)
-- `updatedAt` (DateTime)
+- `quantity` (Float)
+- `price` (Float)
+- `taxRate` (Float, Default: 0)
+- `discount` (Float, Default: 0)
+- `total` (Float)
+- `sortOrder` (Integer, Default: 0)
 
 ### Payment ✅
 
-- `id` (UUID, Primary Key)
+- `id` (String, Primary Key, CUID)
 - `number` (String, Unique)
-- `customerId` (UUID, Foreign Key)
-- `invoiceId` (UUID, Foreign Key)
-- `amount` (Decimal)
-- `method` (Enum: CASH, BANK_TRANSFER, CHECK, CREDIT_CARD, OTHER)
-- `date` (Date)
-- `reference` (String)
-- `notes` (Text)
+- `customerId` (String, Foreign Key to Customer)
+- `invoiceId` (String, Foreign Key to Invoice, Optional)
+- `amount` (Float)
+- `method` (String)
+- `date` (DateTime)
+- `notes` (String, Optional)
 - `status` (Enum: PENDING, COMPLETED, FAILED, CANCELLED)
+- `isActive` (Boolean)
+- `createdBy` (String, Foreign Key to User)
 - `createdAt` (DateTime)
 - `updatedAt` (DateTime)
 
 ### TaxType ✅
 
-- `id` (UUID, Primary Key)
+- `id` (String, Primary Key, CUID)
 - `name` (String)
-- `rate` (Decimal)
+- `rate` (Float)
+- `isCompound` (Boolean, Default: false)
 - `isActive` (Boolean)
+- `createdBy` (String, Foreign Key to User)
 - `createdAt` (DateTime)
 - `updatedAt` (DateTime)
 
 ### Setting ✅
 
-- `id` (UUID, Primary Key)
+- `id` (String, Primary Key, CUID)
 - `key` (String, Unique)
-- `value` (Text)
-- `type` (Enum: STRING, NUMBER, BOOLEAN, JSON)
-- `description` (String)
-- `isPublic` (Boolean)
+- `value` (String)
+- `type` (String)
+- `description` (String, Optional)
+- `createdBy` (String, Foreign Key to User)
 - `createdAt` (DateTime)
 - `updatedAt` (DateTime)
+
+### Session ✅
+
+- `id` (String, Primary Key)
+- `expiresAt` (DateTime)
+- `token` (String, Unique)
+- `createdAt` (DateTime)
+- `updatedAt` (DateTime)
+- `ipAddress` (String, Optional)
+- `userAgent` (String, Optional)
+- `userId` (String, Foreign Key to User)
+
+### Account ✅
+
+- `id` (String, Primary Key)
+- `accountId` (String)
+- `providerId` (String)
+- `userId` (String, Foreign Key to User)
+- `accessToken` (String, Optional)
+- `refreshToken` (String, Optional)
+- `idToken` (String, Optional)
+- `accessTokenExpiresAt` (DateTime, Optional)
+- `refreshTokenExpiresAt` (DateTime, Optional)
+- `scope` (String, Optional)
+- `password` (String, Optional)
+- `createdAt` (DateTime)
+- `updatedAt` (DateTime)
+
+### Verification ✅
+
+- `id` (String, Primary Key)
+- `identifier` (String)
+- `value` (String)
+- `expiresAt` (DateTime)
+- `createdAt` (DateTime, Optional)
+- `updatedAt` (DateTime, Optional)
 
 ---
 
@@ -280,8 +329,8 @@ InvoiceNest is an open source, web-based invoicing and financial management syst
 
 ## Authentication ✅
 
-- JWT-based authentication ✅
-- Token expiration and refresh ✅
+- Session-based authentication with Better Auth ✅
+- Session management and security ✅
 - Role-based access control ✅
 
 ## Error Handling ✅
@@ -490,7 +539,7 @@ InvoiceNest is an open source, web-based invoicing and financial management syst
 ## ✅ Completed (Phase 1)
 
 - **Project Infrastructure**: Next.js, TypeScript, Prisma, Tailwind CSS
-- **Authentication System**: JWT-based auth with admin setup
+- **Authentication System**: Better Auth with session-based authentication
 - **Database Schema**: Complete data model for all entities
 - **API Infrastructure**: Error handling, validation, middleware
 - **Testing Framework**: Unit and integration tests with 75% coverage
@@ -511,4 +560,4 @@ InvoiceNest is an open source, web-based invoicing and financial management syst
 - **Mobile App**: Native mobile application
 - **Enterprise Features**: Multi-tenant, advanced security
 
-**Overall Progress**: ~20% Complete (Infrastructure and Authentication Complete)
+**Overall Progress**: ~40% Complete (Infrastructure and Authentication Complete)
