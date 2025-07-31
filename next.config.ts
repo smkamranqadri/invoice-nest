@@ -1,12 +1,12 @@
-import withPWA from "next-pwa";
+import withPWA from 'next-pwa';
 
 const nextConfig = {
-  serverExternalPackages: ["@prisma/client"],
+  serverExternalPackages: ['@prisma/client'],
 };
 
 export default withPWA({
-  dest: "public",
+  dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === "development",
+  disable: process.env.NODE_ENV === 'development',
 })(nextConfig);

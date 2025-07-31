@@ -14,7 +14,6 @@ model User {
   id            String   @id @default(cuid())
   email         String   @unique
   name          String
-  password      String
   role          Role     @default(USER)
   preferences   Json?
   isActive      Boolean  @default(true)
@@ -22,50 +21,67 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  image    String?
+  sessions Session[]
+  accounts Account[]
+
+  companies Company[]
+  customers Customer[]
+  invoices Invoice[]
+  payments Payment[]
+  taxTypes TaxType[]
+  settings Setting[]
+
   @@map("users")
 }
 
 model Company {
-  id                  String   @id @default(cuid())
-  name                String
-  logo                String?
-  address             String?
-  city                String?
-  state               String?
-  country             String   @default("US")
-  zipCode             String?
-  phone               String?
-  email               String?
-  website             String?
-  taxId               String?
-  registrationNumber  String?
-  settings            Json?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  name               String
+  logo               String?
+  address            String?
+  city               String?
+  state              String?
+  country            String   @default("US")
+  zipCode            String?
+  phone              String?
+  email              String?
+  website            String?
+  taxId              String?
+  registrationNumber String?
+  settings           Json?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  createdBy String
+  user      User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
 
   @@map("companies")
 }
 
 model Customer {
-  id           String       @id @default(cuid())
-  displayName  String
-  contactName  String?
-  email        String?
-  phone        String?
-  website      String?
-  address      String?
-  city         String?
-  state        String?
-  country      String       @default("US")
-  zipCode      String?
-  status       CustomerStatus @default(ACTIVE)
-  isActive     Boolean      @default(true)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id          String         @id @default(cuid())
+  displayName String
+  contactName String?
+  email       String?
+  phone       String?
+  website     String?
+  address     String?
+  city        String?
+  state       String?
+  country     String         @default("US")
+  zipCode     String?
+  status      CustomerStatus @default(ACTIVE)
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  createdBy String
+  user      User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
 
   // Relations
-  invoices     Invoice[]
-  payments     Payment[]
+  invoices Invoice[]
+  payments Payment[]
 
   @@map("customers")
 }
@@ -86,27 +102,30 @@ model Invoice {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
+  createdBy String
+  user      User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
   // Relations
-  customer       Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  items          InvoiceItem[]
-  payments       Payment[]
+  customer Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items    InvoiceItem[]
+  payments Payment[]
 
   @@map("invoices")
 }
 
 model InvoiceItem {
-  id          String  @id @default(cuid())
+  id          String @id @default(cuid())
   invoiceId   String
   description String
   quantity    Float
   price       Float
-  taxRate     Float   @default(0)
-  discount    Float   @default(0)
+  taxRate     Float  @default(0)
+  discount    Float  @default(0)
   total       Float
-  sortOrder   Int     @default(0)
+  sortOrder   Int    @default(0)
 
   // Relations
-  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 
   @@map("invoice_items")
 }
@@ -125,9 +144,12 @@ model Payment {
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 
+  createdBy String
+  user      User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
   // Relations
-  customer   Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  invoice    Invoice?      @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  invoice  Invoice? @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
 
   @@map("payments")
 }
@@ -141,6 +163,9 @@ model TaxType {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
+  createdBy String
+  user      User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
   @@map("tax_types")
 }
 
@@ -153,10 +178,14 @@ model Setting {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  createdBy String
+  user      User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
   @@map("settings")
 }
 
 // Enums
+
 enum Role {
   ADMIN
   USER
@@ -181,4 +210,49 @@ enum PaymentStatus {
   COMPLETED
   FAILED
   CANCELLED
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
 }

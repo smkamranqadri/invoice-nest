@@ -6,24 +6,27 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 ## Development Workflow
 
 ### TDD (Test-Driven Development) Workflow
-* For each new feature or fix:
-  * Write a failing test first (Jest for backend, React Testing Library for frontend)
-  * Implement minimal code to pass the test
-  * Refactor code for clarity, performance, and compliance with standards
-  * Repeat this cycle until the feature is complete
+
+- For each new feature or fix:
+  - Write a failing test first (Jest for backend, React Testing Library for frontend)
+  - Implement minimal code to pass the test
+  - Refactor code for clarity, performance, and compliance with standards
+  - Repeat this cycle until the feature is complete
 
 ### Git Workflow
-* **Branch Strategy**: feature/feature-name, bugfix/issue-description, hotfix/critical-fix
-* **Commit Convention**: feat:, fix:, docs:, style:, refactor:, test:, chore:
-* **Pull Request**: Required for all changes, code review mandatory
-* **Release Strategy**: Semantic versioning (MAJOR.MINOR.PATCH)
+
+- **Branch Strategy**: feature/feature-name, bugfix/issue-description, hotfix/critical-fix
+- **Commit Convention**: feat:, fix:, docs:, style:, refactor:, test:, chore:
+- **Pull Request**: Required for all changes, code review mandatory
+- **Release Strategy**: Semantic versioning (MAJOR.MINOR.PATCH)
 
 ### Code Quality Standards
-* **ESLint**: Enforce code style and catch potential errors
-* **Prettier**: Consistent code formatting
-* **TypeScript**: Strict type checking
-* **Husky**: Pre-commit hooks for linting and testing
-* **Code Coverage**: Minimum 80% coverage for critical paths
+
+- **ESLint**: Enforce code style and catch potential errors
+- **Prettier**: Consistent code formatting
+- **TypeScript**: Strict type checking
+- **Husky**: Pre-commit hooks for linting and testing
+- **Code Coverage**: Minimum 80% coverage for critical paths
 
 ---
 
@@ -34,6 +37,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 **Status**: ✅ COMPLETED
 
 **Tasks**:
+
 - [x] Initialize Next.js project with TypeScript
 - [x] Set up Tailwind CSS for styling
 - [x] Configure ESLint and Prettier
@@ -45,6 +49,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [x] Create project documentation structure
 
 **Deliverables**:
+
 - ✅ Next.js project with TypeScript
 - ✅ Tailwind CSS configuration
 - ✅ Prisma setup with SQLite
@@ -60,6 +65,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 **Status**: ✅ COMPLETED
 
 **Tasks**:
+
 - [x] Implement JWT authentication system
 - [x] Create user model and database schema
 - [x] Implement first-time admin setup
@@ -73,6 +79,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [x] Set up test database isolation
 
 **Deliverables**:
+
 - ✅ JWT authentication system
 - ✅ User management with roles
 - ✅ First-time admin setup
@@ -89,6 +96,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 **Status**: 🚧 NOT STARTED
 
 **Tasks**:
+
 - [ ] Implement customer management API
 - [ ] Create customer CRUD operations
 - [ ] Add customer search and filtering
@@ -101,6 +109,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [ ] Add customer data validation
 
 **Deliverables**:
+
 - Customer management API
 - Customer CRUD operations
 - Customer management UI
@@ -114,6 +123,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 **Status**: 🚧 NOT STARTED
 
 **Tasks**:
+
 - [ ] Implement invoice management API
 - [ ] Create invoice CRUD operations
 - [ ] Add invoice numbering system
@@ -126,6 +136,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [ ] Add invoice PDF generation
 
 **Deliverables**:
+
 - Invoice management API
 - Invoice CRUD operations
 - Invoice management UI
@@ -140,6 +151,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 **Status**: 🚧 NOT STARTED
 
 **Tasks**:
+
 - [ ] Implement payment tracking API
 - [ ] Create payment CRUD operations
 - [ ] Add payment status management
@@ -152,6 +164,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [ ] Add payment receipt generation
 
 **Deliverables**:
+
 - Payment tracking API
 - Payment CRUD operations
 - Payment management UI
@@ -165,6 +178,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 **Status**: 🚧 NOT STARTED
 
 **Tasks**:
+
 - [ ] Create dashboard layout and components
 - [ ] Implement key metrics calculations
 - [ ] Add sales reports functionality
@@ -177,6 +191,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [ ] Add report scheduling
 
 **Deliverables**:
+
 - Dashboard with key metrics
 - Sales and payment reports
 - Data visualization
@@ -190,6 +205,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 **Status**: 🚧 NOT STARTED
 
 **Tasks**:
+
 - [ ] Implement offline functionality
 - [ ] Add background sync capabilities
 - [ ] Create mobile-optimized UI
@@ -202,6 +218,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [ ] Optimize for mobile performance
 
 **Deliverables**:
+
 - Offline functionality
 - Background sync
 - Mobile optimization
@@ -215,6 +232,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 **Status**: 🚧 NOT STARTED
 
 **Tasks**:
+
 - [ ] Write comprehensive integration tests
 - [ ] Add end-to-end tests
 - [ ] Perform security testing
@@ -227,6 +245,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [ ] Perform user acceptance testing
 
 **Deliverables**:
+
 - Comprehensive test suite
 - Security audit results
 - Performance benchmarks
@@ -240,6 +259,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 **Status**: 🚧 NOT STARTED
 
 **Tasks**:
+
 - [ ] Create Docker configuration
 - [ ] Set up Docker Compose for development
 - [ ] Create production deployment scripts
@@ -256,6 +276,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [ ] Add inline code documentation
 
 **Deliverables**:
+
 - Docker configuration
 - Deployment scripts
 - Monitoring setup
@@ -268,6 +289,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 ## Current Implementation Status
 
 ### ✅ Completed Features
+
 - **Project Infrastructure**: Next.js, TypeScript, Prisma, Tailwind CSS
 - **Authentication System**: JWT-based auth with admin setup
 - **Database Schema**: Complete data model for all entities
@@ -277,14 +299,16 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - **Documentation**: Comprehensive project documentation
 
 ### 🚧 Next Steps (Phase 3)
+
 1. **Customer Management API**: Implement CRUD operations
 2. **Customer Management UI**: Create React components and pages
 3. **Customer Validation**: Add form validation and error handling
 4. **Customer Tests**: Write comprehensive test coverage
 
 ### 📊 Progress Summary
+
 - **Phase 1**: ✅ 100% Complete
-- **Phase 2**: ✅ 100% Complete  
+- **Phase 2**: ✅ 100% Complete
 - **Phase 3**: 🚧 0% Complete (Next priority)
 - **Phase 4**: 🚧 0% Complete
 - **Phase 5**: 🚧 0% Complete
@@ -300,12 +324,14 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 ## Risk Management
 
 ### Technical Risks
+
 - **Database Performance**: Implement proper indexing and query optimization
 - **Security Vulnerabilities**: Regular security audits and dependency updates
 - **Browser Compatibility**: Test across major browsers and devices
 - **Scalability Issues**: Design for horizontal scaling from the start
 
 ### Mitigation Strategies
+
 - **Regular Code Reviews**: All changes require peer review
 - **Automated Testing**: Comprehensive test coverage prevents regressions
 - **Performance Monitoring**: Real-time monitoring of application performance
@@ -316,6 +342,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 ## Success Criteria
 
 ### Functional Requirements
+
 - [ ] All core features implemented and tested
 - [ ] User authentication and authorization working
 - [ ] Invoice creation and management functional
@@ -324,6 +351,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [ ] PDF generation working correctly
 
 ### Non-Functional Requirements
+
 - [ ] Application loads in under 2 seconds
 - [ ] API responses under 500ms
 - [ ] 80%+ test coverage
@@ -332,6 +360,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [ ] Security audit passed
 
 ### Quality Metrics
+
 - [ ] Zero critical bugs in production
 - [ ] 99.9% uptime
 - [ ] User satisfaction score > 4.5/5
@@ -342,6 +371,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 ## Future Enhancements (v2)
 
 ### Advanced Features
+
 - [ ] Multi-language support
 - [ ] Advanced analytics and insights
 - [ ] Mobile application
@@ -350,6 +380,7 @@ A comprehensive step-by-step plan for building the core v1 of InvoiceNest. Each 
 - [ ] Multi-tenant architecture
 
 ### Infrastructure Improvements
+
 - [ ] Microservices architecture
 - [ ] Event-driven architecture
 - [ ] Advanced caching with Redis
@@ -368,24 +399,27 @@ This comprehensive plan provides a structured approach to building InvoiceNest v
 To ensure quality and maintain rapid development for the MVP, the following pragmatic testing strategy will be used:
 
 ### 1. Integration Tests for Core Flows
+
 - Focus on integration tests for all API endpoints and main user flows (authentication, customer CRUD, invoice creation, payments, reports).
 - These tests provide confidence that the system works end-to-end and catch real-world bugs that matter most for MVP users.
 
 ### 2. Unit Tests for Critical/Complex Logic
+
 - Write unit tests for utility functions (date formatting, currency, calculations) and any business logic that is non-trivial or reused in multiple places.
 - This ensures correctness and makes future refactoring safe.
 
 ### 3. Skip Unit Tests for Simple Controllers/Services
+
 - For simple CRUD controllers/services that just delegate to other layers, rely on integration tests for coverage.
 - Unit tests can be added later if/when the logic grows in complexity.
 
 ### Summary Table
 
-| Layer         | Unit Test? | Integration Test? | MVP Recommendation         |
-|---------------|------------|-------------------|---------------------------|
-| Utilities     | Yes        | No                | Yes (fast, easy)          |
-| Controllers   | Optional   | Yes               | Integration only          |
-| Services      | Optional   | Yes               | Integration only          |
-| API Endpoints | No         | Yes               | Yes                       |
+| Layer         | Unit Test? | Integration Test? | MVP Recommendation |
+| ------------- | ---------- | ----------------- | ------------------ |
+| Utilities     | Yes        | No                | Yes (fast, easy)   |
+| Controllers   | Optional   | Yes               | Integration only   |
+| Services      | Optional   | Yes               | Integration only   |
+| API Endpoints | No         | Yes               | Yes                |
 
 This approach balances speed, coverage, and maintainability for the MVP. As the project evolves, the testing strategy can be expanded to include more granular unit tests and end-to-end (E2E) tests as needed.

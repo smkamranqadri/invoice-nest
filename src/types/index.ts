@@ -1,12 +1,40 @@
+// Enums
+export enum Role {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
+
+export enum CustomerStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  ARCHIVED = 'ARCHIVED',
+}
+
+export enum InvoiceStatus {
+  DRAFT = 'DRAFT',
+  SENT = 'SENT',
+  PAID = 'PAID',
+  OVERDUE = 'OVERDUE',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum PaymentStatus {
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+  CANCELLED = 'CANCELLED',
+}
+
 // User types
 export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'ADMIN' | 'USER';
+  role: Role;
   preferences?: Record<string, unknown>;
   isActive: boolean;
   emailVerified: boolean;
+  image?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,6 +55,7 @@ export interface Company {
   taxId?: string;
   registrationNumber?: string;
   settings?: Record<string, unknown>;
+  createdBy: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -44,8 +73,9 @@ export interface Customer {
   state?: string;
   country: string;
   zipCode?: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'ARCHIVED';
+  status: CustomerStatus;
   isActive: boolean;
+  createdBy: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -55,7 +85,7 @@ export interface Invoice {
   id: string;
   number: string;
   customerId: string;
-  status: 'DRAFT' | 'SENT' | 'PAID' | 'OVERDUE' | 'CANCELLED';
+  status: InvoiceStatus;
   issueDate: Date;
   dueDate: Date;
   subtotal: number;
@@ -64,6 +94,7 @@ export interface Invoice {
   total: number;
   notes?: string;
   isActive: boolean;
+  createdBy: string;
   createdAt: Date;
   updatedAt: Date;
   customer?: Customer;
@@ -78,7 +109,7 @@ export interface InvoiceItem {
   quantity: number;
   price: number;
   taxRate: number;
-  discount?: number;
+  discount: number;
   total: number;
   sortOrder: number;
 }
@@ -93,8 +124,9 @@ export interface Payment {
   method: string;
   date: Date;
   notes?: string;
-  status: 'PENDING' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
+  status: PaymentStatus;
   isActive: boolean;
+  createdBy: string;
   createdAt: Date;
   updatedAt: Date;
   customer?: Customer;
@@ -108,6 +140,7 @@ export interface TaxType {
   rate: number;
   isCompound: boolean;
   isActive: boolean;
+  createdBy: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -119,6 +152,48 @@ export interface Setting {
   value: string;
   type: string;
   description?: string;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Session types
+export interface Session {
+  id: string;
+  expiresAt: Date;
+  token: string;
+  createdAt: Date;
+  updatedAt: Date;
+  ipAddress?: string;
+  userAgent?: string;
+  userId: string;
+}
+
+// Account types
+export interface Account {
+  id: string;
+  accountId: string;
+  providerId: string;
+  userId: string;
+  accessToken?: string;
+  refreshToken?: string;
+  idToken?: string;
+  accessTokenExpiresAt?: Date;
+  refreshTokenExpiresAt?: Date;
+  scope?: string;
+  password?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Verification types
+export interface Verification {
+  id: string;
+  identifier: string;
+  value: string;
+  expiresAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 // API Response types
@@ -146,4 +221,4 @@ export interface PaginatedResponse<T> {
     total: number;
     totalPages: number;
   };
-} 
+}
