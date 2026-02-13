@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 1 of 6 (Auth, Workspaces & UI Foundation)
-Plan: 4 of 5 in current phase
-Status: Executing
-Last activity: 2026-02-13 -- Completed 01-04 (Workspace Creation & Settings)
+Plan: 5 of 5 in current phase
+Status: Phase Complete
+Last activity: 2026-02-13 -- Completed 01-05 (Member Invitation & Management)
 
-Progress: [████████░░] 80%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 6 min
-- Total execution time: 0.37 hours
+- Total plans completed: 5
+- Average duration: 13 min
+- Total execution time: 1.12 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-auth-workspaces-ui-foundation | 4 | 22 min | 6 min |
+| 01-auth-workspaces-ui-foundation | 5 | 67 min | 13 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (14 min), 01-02 (3 min), 01-03 (3 min), 01-04 (2 min)
-- Trend: accelerating
+- Last 5 plans: 01-01 (14 min), 01-02 (3 min), 01-03 (3 min), 01-04 (2 min), 01-05 (45 min)
+- Trend: 01-05 longer due to human verification + 6 bug fixes found during testing
 
 *Updated after each plan completion*
 
@@ -56,6 +56,10 @@ Recent decisions affecting current work:
 - [01-04]: Dashboard layout renders without sidebar when no activeOrganizationId (clean create-workspace page)
 - [01-04]: Owner-only settings access enforced via auth.api.getActiveMember() role check
 - [01-04]: Slug auto-generated from workspace name with manual override capability
+- [01-05]: Disabled session cookieCache for v1 to avoid stale activeOrganizationId after org switching
+- [01-05]: Accept-invitation page placed outside dashboard route group (public route for unauthenticated invitees)
+- [01-05]: Sign-in calls organization.setActive() for returning users with existing workspaces
+- [01-05]: Sign-up form supports callbackUrl for invitation flow redirect
 
 ### Pending Todos
 
@@ -70,5 +74,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-13
-Stopped at: Completed 01-04-PLAN.md (Workspace Creation & Settings)
-Resume file: .planning/phases/01-auth-workspaces-ui-foundation/01-04-SUMMARY.md
+Stopped at: Completed 01-05-PLAN.md (Member Invitation & Management) -- Phase 1 complete
+Resume file: .planning/phases/01-auth-workspaces-ui-foundation/01-05-SUMMARY.md
