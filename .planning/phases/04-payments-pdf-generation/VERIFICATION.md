@@ -1,6 +1,6 @@
 ---
 phase: 04-payments-pdf-generation
-verified: 2026-02-13T20:41:38Z
+verified: 2026-02-13T20:54:47Z
 status: human_verification_partial
 human_verification_result: pass_with_open_issue
 score: 11/12_manual_scope
@@ -50,14 +50,14 @@ requirements:
     note: "PDF includes customer data, line items, tax, discount, totals, due date"
   - id: "PDF-04"
     status: "pass_with_follow_up"
-    note: "Deterministic line-item page chunking implemented; targeted human retest still pending confirmation"
+    note: "Deterministic line-item page chunking, repeated per-page table sections, and Page X/Y footer markers implemented; targeted human retest still pending confirmation"
   - id: "PDF-05"
     status: "pass"
     note: "PDF route returns downloadable application/pdf attachment"
 open_issues:
   - severity: "low"
-    item: "Targeted manual retest for UAT-11 has not been re-confirmed after deterministic PDF chunking and modal overflow fixes"
-    follow_up: "Run targeted UAT retest for long invoice PDF pagination + invoice edit modal scroll behavior and confirm pass"
+    item: "Targeted manual retest for UAT-11 has not been re-confirmed after sticky draft-edit footer, discount row layout stabilization, and visible PDF page-marker updates"
+    follow_up: "Run targeted UAT retest for long invoice PDF pagination + invoice edit modal scroll behavior + discount row layout and confirm pass"
   - severity: "low"
     item: "No focused automated tests yet for payment action invariants and PDF pagination edge cases"
     follow_up: "Add targeted domain/action tests in a hardening pass"
@@ -116,7 +116,7 @@ human_verification:
 
 **Phase goal:** Deliver payment recording (including partials/corrections) and invoice PDF download workflows with workspace isolation and role-aware actions.
 
-**Verified:** 2026-02-13T20:41:38Z  
+**Verified:** 2026-02-13T20:54:47Z  
 **Status:** human_verification_partial (all prior manual checks pass except targeted re-confirmation pending for UAT-11 fix)
 
 ## Scope Basis
@@ -146,10 +146,15 @@ human_verification:
 ## UAT-11 Fixes Applied In This Verification Cycle
 
 1. **Long PDF pagination quality**
-   - Implemented deterministic line-item chunking across pages with repeated table headers.
-   - Moved totals/notes into a clean summary section to avoid awkward mid-flow split artifacts.
+   - Implemented deterministic line-item chunking across pages with repeated table headers and explicit per-page line-item ranges.
+   - Added fixed page footer markers (`Page X of Y`) on every page for clearly visible multi-page structure.
+   - Kept totals/notes on summary section instead of interleaving with line-item pages.
 2. **Invoice edit dialog overflow**
-   - Added bounded dialog height and internal scroll container for large draft-edit forms.
+   - Added bounded dialog height + internal scroll container for large draft-edit forms.
+   - Added dedicated sticky modal footer submit action to keep save action visible while scrolling.
+3. **Discount/tax row overlap**
+   - Reworked discount/tax form row to a stable three-column responsive layout.
+   - Forced discount select trigger to full-width and added `min-w-0` constraints to prevent overlap.
 
 ## Verification Outcome
 

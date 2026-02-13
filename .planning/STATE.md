@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 
 Phase: 4 of 6 (Payments & PDF Generation) -- Verification In Progress
 Plan: Verification artifacts created for implemented Phase 4 scope (no standalone PLAN.md existed)
-Status: Automated checks passed; manual UAT 11/12 passed, UAT-11 targeted re-confirmation pending after fixes
-Last activity: 2026-02-13 -- Applied UAT-11 fixes (deterministic PDF chunking + edit dialog overflow control) during /gsd:verify-work 4
+Status: Automated checks passed; manual UAT 11/12 passed, UAT-11 targeted re-confirmation pending after latest UI/PDF visibility fixes
+Last activity: 2026-02-13 -- Applied patch for sticky edit-modal save, discount row overlap fix, and visible PDF page markers during /gsd:verify-work 4
 
 Progress: [████████░░] 80%
 
@@ -86,6 +86,7 @@ None yet.
 - ~~[Research]: Tailwind CSS v4 + shadcn/ui compatibility needs verification before Phase 1 implementation~~ RESOLVED: Tailwind v4 + shadcn/ui works perfectly (verified in 01-01)
 - ~~[Research]: better-auth organizations plugin API needs hands-on validation during Phase 1 planning~~ RESOLVED: better-auth org plugin schema generated and tables migrated successfully (verified in 01-01)
 - [Phase 4]: Targeted human retest still needed for large-invoice PDF pagination/readability after deterministic chunking fix
+- [Phase 4]: Targeted human retest still needed for sticky draft-edit footer visibility, discount row layout, and long-invoice PDF pagination/readability after latest patch
 
 ### Phase 4 Discovery (2026-02-13)
 
@@ -116,8 +117,10 @@ None yet.
   - Passed: tests 1-10 and 12
   - Pending targeted re-confirmation: test 11 (long-invoice PDF pagination/readability and edit-draft modal overflow behavior after fix)
 - Applied fixes during verification:
-  - Deterministic multi-page PDF line-item chunking with repeated headers
+  - Deterministic multi-page PDF line-item chunking with repeated headers and fixed `Page X of Y` footer markers
   - Bounded invoice edit dialog with internal scroll for large draft forms
+  - Sticky edit-draft modal save footer to keep submit action visible while scrolling
+  - Discount/tax row layout stabilization (`md:grid-cols-3`, full-width select trigger, `min-w-0` controls)
 
 ### Quick Tasks Completed
 
