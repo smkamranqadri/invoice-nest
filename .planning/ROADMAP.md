@@ -7,7 +7,7 @@ InvoiceNest delivers a self-hosted invoicing workspace for small businesses, bui
 ## Phases
 
 - [x] **Phase 1: Auth, Workspaces & UI Foundation** - Users can sign up, create workspaces, invite members, and operate within a role-based multi-tenant environment
-- [ ] **Phase 2: Customer Management** - Users can manage their customer directory with full CRUD, search, filtering, and status tracking
+- [x] **Phase 2: Customer Management** - Users can manage their customer directory with full CRUD, search, filtering, and status tracking
 - [ ] **Phase 3: Invoice Creation** - Users can create, edit, and manage invoices with line items, tax, discounts, and status workflows
 - [ ] **Phase 4: Payments & PDF Generation** - Users can record payments against invoices and generate professional PDF documents
 - [ ] **Phase 5: Dashboard, Settings & Polish** - Users see a financial overview dashboard and can configure workspace settings, clone invoices, and export data
@@ -46,9 +46,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md -- Customer schema, migration, validation, queries, and server actions
-- [ ] 02-02-PLAN.md -- Customer list page with search, filter, add/edit dialogs, and status toggle
-- [ ] 02-03-PLAN.md -- Customer detail page with contact info, balance placeholder, and invoice history
+- [x] 02-01-PLAN.md -- Customer schema, migration, validation, queries, and server actions
+- [x] 02-02-PLAN.md -- Customer list page with search, filter, add/edit dialogs, and status toggle
+- [x] 02-03-PLAN.md -- Customer detail page with contact info, balance placeholder, and invoice history
 
 ### Phase 3: Invoice Creation
 **Goal**: Users can create professional invoices with line items, tax, and discounts, manage invoice lifecycle through status transitions, and view/filter their invoice list
@@ -123,7 +123,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
 | 1. Auth, Workspaces & UI Foundation | 5/5 | ✓ Complete | 2026-02-13 |
-| 2. Customer Management | 0/TBD | Not started | - |
+| 2. Customer Management | 3/3 | ✓ Complete | 2026-02-13 |
 | 3. Invoice Creation | 0/TBD | Not started | - |
 | 4. Payments & PDF Generation | 0/TBD | Not started | - |
 | 5. Dashboard, Settings & Polish | 0/TBD | Not started | - |
