@@ -21,25 +21,7 @@ export function LineItemsEditor({ form, disabled = false }: LineItemsEditorProps
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium">Line Items</h3>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() =>
-            append({
-              description: "",
-              quantity: 1,
-              unitPrice: 0.01,
-            })
-          }
-          disabled={disabled}
-        >
-          <Plus className="mr-1.5 h-4 w-4" />
-          Add Line
-        </Button>
-      </div>
+      <h3 className="text-sm font-medium">Line Items</h3>
 
       <div className="space-y-2">
         {fields.map((field, index) => (
@@ -111,6 +93,25 @@ export function LineItemsEditor({ form, disabled = false }: LineItemsEditorProps
       {typeof errors?.message === "string" && (
         <p className="text-xs text-destructive">{errors.message}</p>
       )}
+
+      <div className="flex md:justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() =>
+            append({
+              description: "",
+              quantity: 1,
+              unitPrice: 0.01,
+            })
+          }
+          disabled={disabled}
+        >
+          <Plus className="mr-1.5 h-4 w-4" />
+          Add Line
+        </Button>
+      </div>
     </div>
   );
 }
