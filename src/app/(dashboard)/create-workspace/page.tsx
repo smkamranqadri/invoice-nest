@@ -1,7 +1,9 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { CreateWorkspaceForm } from "@/components/workspace/create-workspace-form";
+import { Button } from "@/components/ui/button";
 
 export default async function CreateWorkspacePage() {
   const session = await auth.api.getSession({
@@ -29,6 +31,11 @@ export default async function CreateWorkspacePage() {
           </p>
         </div>
         <CreateWorkspaceForm />
+        <div className="text-center">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/api/auth/sign-out">Sign out</Link>
+          </Button>
+        </div>
       </div>
     </div>
   );
