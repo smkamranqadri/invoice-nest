@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +16,11 @@ import {
   type CreateInvoiceDraftFormInput,
   type CreateInvoiceDraftInput,
 } from "@/lib/validations/invoice";
+import {
+  DEFAULT_WORKSPACE_CURRENCY,
+  normalizeWorkspaceTaxPresets,
+  type WorkspaceTaxPreset,
+} from "@/lib/workspace/settings";
 import { calculateInvoiceTotals } from "@/lib/domain/invoice-totals";
 import { LineItemsEditor } from "@/components/invoices/line-items-editor";
 import { Button } from "@/components/ui/button";
@@ -31,6 +36,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -52,12 +58,14 @@ interface InvoiceFormProps {
   formId?: string;
   hideSubmitButton?: boolean;
   onSubmittingChange?: (isSubmitting: boolean) => void;
+  currency?: string;
+  taxPresets?: WorkspaceTaxPreset[];
 }
 
-function formatCurrencyFromCents(amountCents: number) {
+function formatCurrencyFromCents(amountCents: number, currency: string) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency,
   }).format(amountCents / 100);
 }
 
@@ -76,9 +84,33 @@ export function InvoiceForm({
   formId,
   hideSubmitButton = false,
   onSubmittingChange,
+  currency = DEFAULT_WORKSPACE_CURRENCY,
+  taxPresets = [],
 }: InvoiceFormProps) {
   const router = useRouter();
   const isEditing = mode === "edit";
+  const normalizedTaxPresets = useMemo(
+    () => normalizeWorkspaceTaxPresets(taxPresets),
+    [taxPresets],
+  );
+  const defaultTaxPreset = useMemo(
+    () =>
+      normalizedTaxPresets.find((preset) => preset.isDefault) ??
+      normalizedTaxPresets[0] ??
+      null,
+    [normalizedTaxPresets],
+  );
+  const [selectedTaxPresetId, setSelectedTaxPresetId] = useState(() => {
+    if (initialData) {
+      const matchingPreset = normalizedTaxPresets.find(
+        (preset) =>
+          Math.abs(preset.rate - Number(initialData.taxRate ?? 0)) < 1e-8,
+      );
+      return matchingPreset?.id ?? "custom";
+    }
+
+    return defaultTaxPreset?.id ?? "custom";
+  });
 
   const form = useForm<CreateInvoiceDraftFormInput>({
     resolver: zodResolver(createInvoiceDraftSchema),
@@ -90,7 +122,7 @@ export function InvoiceForm({
       discountType: "none",
       discountRate: 0,
       discountAmount: 0,
-      taxRate: 0,
+      taxRate: defaultTaxPreset?.rate ?? 0,
       lineItems: [
         {
           description: "",
@@ -124,6 +156,27 @@ export function InvoiceForm({
   useEffect(() => {
     onSubmittingChange?.(form.formState.isSubmitting);
   }, [form.formState.isSubmitting, onSubmittingChange]);
+
+  function handleTaxPresetChange(nextPresetId: string) {
+    if (nextPresetId === "custom") {
+      setSelectedTaxPresetId("custom");
+      return;
+    }
+
+    const preset = normalizedTaxPresets.find(
+      (taxPreset) => taxPreset.id === nextPresetId,
+    );
+    if (!preset) {
+      setSelectedTaxPresetId("custom");
+      return;
+    }
+
+    setSelectedTaxPresetId(preset.id);
+    form.setValue("taxRate", preset.rate, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  }
 
   async function onSubmit(values: CreateInvoiceDraftFormInput) {
     const result = isEditing
@@ -205,7 +258,7 @@ export function InvoiceForm({
 
         <LineItemsEditor form={form} disabled={form.formState.isSubmitting} />
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
           <FormField
             control={form.control}
             name="discountType"
@@ -295,6 +348,42 @@ export function InvoiceForm({
             ) : null}
           </div>
 
+          <FormItem className="min-w-0">
+            <FormLabel>Tax Preset</FormLabel>
+            <Select
+              value={
+                normalizedTaxPresets.some(
+                  (preset) => preset.id === selectedTaxPresetId,
+                )
+                  ? selectedTaxPresetId
+                  : "custom"
+              }
+              onValueChange={handleTaxPresetChange}
+              disabled={form.formState.isSubmitting || normalizedTaxPresets.length === 0}
+            >
+              <FormControl>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Choose tax preset" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {normalizedTaxPresets.map((preset) => (
+                  <SelectItem key={preset.id} value={preset.id}>
+                    {preset.name} ({preset.rate.toFixed(2)}%)
+                    {preset.isDefault ? " • Default" : ""}
+                  </SelectItem>
+                ))}
+                <SelectItem value="custom">Custom</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormDescription>
+              {normalizedTaxPresets.length > 0
+                ? "Selecting a preset applies its tax rate."
+                : "No tax presets configured in workspace settings."}
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+
           <FormField
             control={form.control}
             name="taxRate"
@@ -308,9 +397,10 @@ export function InvoiceForm({
                     max="100"
                     step="0.01"
                     value={field.value ?? ""}
-                    onChange={(event) =>
-                      field.onChange(event.target.valueAsNumber)
-                    }
+                    onChange={(event) => {
+                      setSelectedTaxPresetId("custom");
+                      field.onChange(event.target.valueAsNumber);
+                    }}
                     disabled={form.formState.isSubmitting}
                   />
                 </FormControl>
@@ -369,19 +459,23 @@ export function InvoiceForm({
           <CardContent className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Subtotal</span>
-              <span>{formatCurrencyFromCents(totalsPreview.subtotalCents)}</span>
+              <span>
+                {formatCurrencyFromCents(totalsPreview.subtotalCents, currency)}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Discount</span>
-              <span>-{formatCurrencyFromCents(totalsPreview.discountCents)}</span>
+              <span>
+                -{formatCurrencyFromCents(totalsPreview.discountCents, currency)}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Tax</span>
-              <span>{formatCurrencyFromCents(totalsPreview.taxCents)}</span>
+              <span>{formatCurrencyFromCents(totalsPreview.taxCents, currency)}</span>
             </div>
             <div className="flex justify-between border-t pt-2 text-base font-semibold">
               <span>Total</span>
-              <span>{formatCurrencyFromCents(totalsPreview.totalCents)}</span>
+              <span>{formatCurrencyFromCents(totalsPreview.totalCents, currency)}</span>
             </div>
           </CardContent>
         </Card>

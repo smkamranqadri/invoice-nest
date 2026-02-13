@@ -2,13 +2,20 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 import { InvoiceForm } from "@/components/invoices/invoice-form";
-import { getRequiredOrganization } from "@/lib/queries/workspace";
+import {
+  getRequiredOrganization,
+  getWorkspaceSettings,
+} from "@/lib/queries/workspace";
 import { getActiveInvoiceCustomers } from "@/lib/queries/invoice";
+import { DEFAULT_WORKSPACE_CURRENCY } from "@/lib/workspace/settings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function NewInvoicePage() {
   const { organizationId } = await getRequiredOrganization();
   const customers = await getActiveInvoiceCustomers(organizationId);
+  const workspace = await getWorkspaceSettings(organizationId);
+  const currency = workspace?.settings.currency ?? DEFAULT_WORKSPACE_CURRENCY;
+  const taxPresets = workspace?.settings.taxPresets ?? [];
 
   return (
     <div className="space-y-6">
@@ -43,6 +50,8 @@ export default async function NewInvoicePage() {
                 id: customer.id,
                 name: customer.name,
               }))}
+              currency={currency}
+              taxPresets={taxPresets}
               mode="create"
               redirectToInvoiceOnCreate
             />
