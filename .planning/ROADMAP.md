@@ -93,12 +93,12 @@ Plans:
   2. Workspace owner can configure company details (name, address, logo) for PDF branding, set default currency, and create reusable tax rate presets
   3. User can clone an existing invoice as a new draft with one action
   4. User can export invoice and payment data as CSV
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
-- [ ] 05-03: TBD
+- [ ] 05-01-PLAN.md -- Workspace settings metadata + owner UI for branding, currency, and tax presets
+- [ ] 05-02-PLAN.md -- Dashboard financial metrics and recent invoice overview
+- [ ] 05-03-PLAN.md -- Invoice clone workflow and CSV exports
 
 ### Phase 6: Docker Deployment
 **Goal**: Application is containerized and runnable with a single `docker compose up` command, with persistent data and production-ready configuration
