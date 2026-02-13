@@ -32,6 +32,7 @@ type SignUpValues = z.infer<typeof signUpSchema>;
 export function SignUpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<SignUpValues>({
@@ -58,7 +59,6 @@ export function SignUpForm() {
       }
 
       // Redirect to callbackUrl if provided (e.g., from invitation link)
-      const callbackUrl = searchParams.get("callbackUrl");
       router.push(callbackUrl || "/dashboard");
     } catch {
       toast.error("Something went wrong. Please try again.");
@@ -120,7 +120,7 @@ export function SignUpForm() {
 
       <p className="mt-4 text-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/sign-in" className="text-primary underline-offset-4 hover:underline">
+        <Link href={callbackUrl ? `/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/sign-in"} className="text-primary underline-offset-4 hover:underline">
           Sign in
         </Link>
       </p>

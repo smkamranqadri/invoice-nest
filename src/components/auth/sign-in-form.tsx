@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -30,6 +30,8 @@ type SignInValues = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<SignInValues>({
@@ -62,7 +64,7 @@ export function SignInForm() {
         });
       }
 
-      router.push("/dashboard");
+      router.push(callbackUrl || "/dashboard");
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -109,7 +111,7 @@ export function SignInForm() {
 
       <p className="mt-4 text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
-        <Link href="/sign-up" className="text-primary underline-offset-4 hover:underline">
+        <Link href={callbackUrl ? `/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/sign-up"} className="text-primary underline-offset-4 hover:underline">
           Sign up
         </Link>
       </p>
