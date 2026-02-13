@@ -16,10 +16,9 @@ export const auth = betterAuth({
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // Refresh after 1 day
-    cookieCache: {
-      enabled: true,
-      maxAge: 30, // 30 seconds - short enough to prevent stale org data
-    },
+    // cookieCache disabled to prevent stale session data
+    // (activeOrganizationId, profile updates, role changes, etc.)
+    // Can optimize with caching in v2 if needed
   },
   plugins: [
     organization({
