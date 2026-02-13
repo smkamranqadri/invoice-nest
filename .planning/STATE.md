@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 Phase: 1 of 6 (Auth, Workspaces & UI Foundation)
 Plan: 5 of 5 in current phase
 Status: Phase Complete
-Last activity: 2026-02-13 -- Completed quick task 1: Change primary color to emerald green
+Last activity: 2026-02-13 -- Completed quick task 2: Fix accept invitation with sign-in flow
 
 Progress: [██████████] 100%
 
@@ -76,9 +76,10 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | Change primary color to emerald green | 2026-02-13 | 7decaf0 | [1-change-primary-color-to-emerald-green](./quick/1-change-primary-color-to-emerald-green/) |
+| 2 | Fix accept invitation with sign-in flow | 2026-02-13 | f091366 | [2-fix-accept-invitation-with-sign-in-flow](./quick/2-fix-accept-invitation-with-sign-in-flow/) |
 
 ## Session Continuity
 
 Last session: 2026-02-13
-Stopped at: Completed quick-1: Change primary color to emerald green
-Resume file: .planning/quick/1-change-primary-color-to-emerald-green/1-SUMMARY.md
+Stopped at: Completed quick-2: Fix accept invitation with sign-in flow
+Resume file: .planning/quick/2-fix-accept-invitation-with-sign-in-flow/2-SUMMARY.md
