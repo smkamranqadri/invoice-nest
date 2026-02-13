@@ -43,11 +43,12 @@ Plans:
   2. User can search customers by name or email and filter the customer list by active/inactive status
   3. User can view a customer detail page showing contact information, outstanding balance, and invoice history (empty until Phase 3)
   4. User can deactivate and reactivate customers without losing their data
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md -- Customer schema, migration, validation, queries, and server actions
+- [ ] 02-02-PLAN.md -- Customer list page with search, filter, add/edit dialogs, and status toggle
+- [ ] 02-03-PLAN.md -- Customer detail page with contact info, balance placeholder, and invoice history
 
 ### Phase 3: Invoice Creation
 **Goal**: Users can create professional invoices with line items, tax, and discounts, manage invoice lifecycle through status transitions, and view/filter their invoice list
