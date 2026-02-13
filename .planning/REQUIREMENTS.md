@@ -207,17 +207,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DEP-03 | Phase 6 | Pending |
 | DEP-04 | Phase 6 | Pending |
 | DEP-05 | Phase 6 | Pending |
-| UI-01 | All Phases | Pending |
-| UI-02 | All Phases | Pending |
-| UI-03 | All Phases | Pending |
-| UI-04 | All Phases | Pending |
-| UI-05 | All Phases | Pending |
+| UI-01 | Phase 1 | Pending |
+| UI-02 | Phase 1 | Pending |
+| UI-03 | Phase 1 | Pending |
+| UI-04 | Phase 1 | Pending |
+| UI-05 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 54 total
 - Mapped to phases: 54
-- Unmapped: 0 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-13*
-*Last updated: 2026-02-13 after initial definition*
+*Last updated: 2026-02-13 after roadmap creation*
