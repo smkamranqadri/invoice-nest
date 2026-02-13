@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 2 of 6 (Customer Management)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In Progress
-Last activity: 2026-02-13 -- Completed 02-01: Customer Data Layer
+Last activity: 2026-02-13 -- Completed 02-02: Customer List Page
 
-Progress: [███░░░░░░░] 33%
+Progress: [████░░░░░░] 40%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 12 min
-- Total execution time: 1.15 hours
+- Total plans completed: 7
+- Average duration: 10 min
+- Total execution time: 1.18 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-auth-workspaces-ui-foundation | 5 | 67 min | 13 min |
-| 02-customer-management | 1 | 2 min | 2 min |
+| 02-customer-management | 2 | 4 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (3 min), 01-03 (3 min), 01-04 (2 min), 01-05 (45 min), 02-01 (2 min)
-- Trend: 02-01 fast -- pure backend data layer, no UI
+- Last 5 plans: 01-03 (3 min), 01-04 (2 min), 01-05 (45 min), 02-01 (2 min), 02-02 (2 min)
+- Trend: 02-02 fast -- straightforward UI assembly from existing data layer
 
 *Updated after each plan completion*
 
@@ -63,6 +63,9 @@ Recent decisions affecting current work:
 - [01-05]: Sign-up form supports callbackUrl for invitation flow redirect
 - [02-01]: Conditions array pattern for composable Drizzle query filters
 - [02-01]: Empty strings from form inputs converted to null in server actions
+- [02-02]: URL-based search/filter state for shareable and browser-back-compatible customer list filtering
+- [02-02]: Debounced search (300ms) to avoid excessive server re-fetches on keystroke
+- [02-02]: Emerald green badge for active customer status matching primary color theme
 
 ### Pending Todos
 
@@ -86,5 +89,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-13
-Stopped at: Completed 02-01-PLAN.md (Customer Data Layer)
-Resume file: .planning/phases/02-customer-management/02-01-SUMMARY.md
+Stopped at: Completed 02-02-PLAN.md (Customer List Page)
+Resume file: .planning/phases/02-customer-management/02-02-SUMMARY.md
