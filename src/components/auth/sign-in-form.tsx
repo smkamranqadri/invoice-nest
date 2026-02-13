@@ -53,6 +53,15 @@ export function SignInForm() {
         return;
       }
 
+      // Check if user has organizations and set one as active
+      const orgsResult = await authClient.organization.list();
+      if (orgsResult.data && orgsResult.data.length > 0) {
+        // Set the first organization as active
+        await authClient.organization.setActive({
+          organizationId: orgsResult.data[0].id,
+        });
+      }
+
       router.push("/dashboard");
     } catch {
       toast.error("Something went wrong. Please try again.");
