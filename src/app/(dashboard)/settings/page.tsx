@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import {
   getRequiredOrganization,
-  getFullOrganization,
+  getWorkspaceSettings,
 } from "@/lib/queries/workspace";
 import { WorkspaceSettingsForm } from "@/components/workspace/workspace-settings-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,9 +17,9 @@ import {
 
 export default async function SettingsPage() {
   const { organizationId } = await getRequiredOrganization();
-  const organization = await getFullOrganization(organizationId);
+  const workspace = await getWorkspaceSettings(organizationId);
 
-  if (!organization) {
+  if (!workspace) {
     redirect("/dashboard");
   }
 
@@ -48,16 +48,7 @@ export default async function SettingsPage() {
         </TabsList>
 
         <TabsContent value="general" className="mt-4">
-          <WorkspaceSettingsForm
-            workspace={{
-              name: organization.name,
-              slug: organization.slug,
-              metadata: organization.metadata as {
-                address?: string;
-                phone?: string;
-              } | null,
-            }}
-          />
+          <WorkspaceSettingsForm workspace={workspace} />
         </TabsContent>
 
         <TabsContent value="members" className="mt-4">
