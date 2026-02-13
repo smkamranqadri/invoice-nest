@@ -46,10 +46,19 @@ export function WorkspaceSwitcher({
     fetchOrgs();
   }, []);
 
+  // Save active organization to localStorage whenever it changes
+  React.useEffect(() => {
+    if (activeOrganization?.id) {
+      localStorage.setItem("lastActiveOrgId", activeOrganization.id);
+    }
+  }, [activeOrganization?.id]);
+
   async function handleSwitchOrg(orgId: string) {
     if (orgId === activeOrganization?.id) return;
     setIsLoading(true);
     await authClient.organization.setActive({ organizationId: orgId });
+    // Save to localStorage for sign-in restoration
+    localStorage.setItem("lastActiveOrgId", orgId);
     // Reload the page to pick up the new active org in server components
     window.location.reload();
   }

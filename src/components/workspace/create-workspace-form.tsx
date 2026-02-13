@@ -75,7 +75,7 @@ export function CreateWorkspaceForm() {
   async function onSubmit(values: CreateWorkspaceValues) {
     setIsLoading(true);
     try {
-      const { error } = await authClient.organization.create({
+      const result = await authClient.organization.create({
         name: values.name,
         slug: values.slug,
         metadata: {
@@ -84,9 +84,14 @@ export function CreateWorkspaceForm() {
         },
       });
 
-      if (error) {
-        toast.error(error.message || "Failed to create workspace");
+      if (result.error) {
+        toast.error(result.error.message || "Failed to create workspace");
         return;
+      }
+
+      // Save the newly created organization as the last active one
+      if (result.data) {
+        localStorage.setItem("lastActiveOrgId", result.data.id);
       }
 
       toast.success("Workspace created successfully!");

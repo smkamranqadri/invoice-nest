@@ -53,12 +53,22 @@ export function SignInForm() {
         return;
       }
 
-      // Check if user has organizations and set one as active
+      // Check if user has organizations and set the most recent one as active
       const orgsResult = await authClient.organization.list();
       if (orgsResult.data && orgsResult.data.length > 0) {
-        // Set the first organization as active (could be most recent in future)
+        // Get the most recently active organization from localStorage (persisted from last session)
+        const lastActiveOrgId = localStorage.getItem("lastActiveOrgId");
+
+        // Verify the stored org is still valid for this user
+        const targetOrg = lastActiveOrgId
+          ? orgsResult.data.find(org => org.id === lastActiveOrgId)
+          : null;
+
+        // Use last active org if found, otherwise use the first one
+        const orgToActivate = targetOrg || orgsResult.data[0];
+
         await authClient.organization.setActive({
-          organizationId: orgsResult.data[0].id,
+          organizationId: orgToActivate.id,
         });
       }
 
