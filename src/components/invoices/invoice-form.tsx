@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,6 +49,9 @@ interface InvoiceFormProps {
   submitLabel?: string;
   redirectToInvoiceOnCreate?: boolean;
   onSuccess?: (invoiceId: string) => void;
+  formId?: string;
+  hideSubmitButton?: boolean;
+  onSubmittingChange?: (isSubmitting: boolean) => void;
 }
 
 function formatCurrencyFromCents(amountCents: number) {
@@ -70,6 +73,9 @@ export function InvoiceForm({
   submitLabel,
   redirectToInvoiceOnCreate = false,
   onSuccess,
+  formId,
+  hideSubmitButton = false,
+  onSubmittingChange,
 }: InvoiceFormProps) {
   const router = useRouter();
   const isEditing = mode === "edit";
@@ -115,6 +121,10 @@ export function InvoiceForm({
     });
   }, [watchedValues]);
 
+  useEffect(() => {
+    onSubmittingChange?.(form.formState.isSubmitting);
+  }, [form.formState.isSubmitting, onSubmittingChange]);
+
   async function onSubmit(values: CreateInvoiceDraftFormInput) {
     const result = isEditing
       ? await updateInvoiceDraft(invoiceId!, values)
@@ -143,7 +153,7 @@ export function InvoiceForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 md:grid-cols-2">
           <FormField
             control={form.control}
@@ -157,7 +167,7 @@ export function InvoiceForm({
                   disabled={form.formState.isSubmitting}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select customer" />
                     </SelectTrigger>
                   </FormControl>
@@ -195,12 +205,12 @@ export function InvoiceForm({
 
         <LineItemsEditor form={form} disabled={form.formState.isSubmitting} />
 
-        <div className="grid gap-4 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <FormField
             control={form.control}
             name="discountType"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="min-w-0">
                 <FormLabel>Discount Type</FormLabel>
                 <Select
                   value={field.value}
@@ -208,7 +218,7 @@ export function InvoiceForm({
                   disabled={form.formState.isSubmitting}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Discount type" />
                     </SelectTrigger>
                   </FormControl>
@@ -223,62 +233,73 @@ export function InvoiceForm({
             )}
           />
 
-          {watchedValues.discountType === "percentage" && (
-            <FormField
-              control={form.control}
-              name="discountRate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Discount %</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min="0"
-                      max="100"
-                      step="0.01"
-                      value={field.value ?? ""}
-                      onChange={(event) =>
-                        field.onChange(event.target.valueAsNumber)
-                      }
-                      disabled={form.formState.isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+          <div className="min-w-0">
+            {watchedValues.discountType === "percentage" ? (
+              <FormField
+                control={form.control}
+                name="discountRate"
+                render={({ field }) => (
+                  <FormItem className="min-w-0">
+                    <FormLabel>Discount %</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        value={field.value ?? ""}
+                        onChange={(event) =>
+                          field.onChange(event.target.valueAsNumber)
+                        }
+                        disabled={form.formState.isSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : null}
 
-          {watchedValues.discountType === "fixed" && (
-            <FormField
-              control={form.control}
-              name="discountAmount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Discount Amount</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      value={field.value ?? ""}
-                      onChange={(event) =>
-                        field.onChange(event.target.valueAsNumber)
-                      }
-                      disabled={form.formState.isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+            {watchedValues.discountType === "fixed" ? (
+              <FormField
+                control={form.control}
+                name="discountAmount"
+                render={({ field }) => (
+                  <FormItem className="min-w-0">
+                    <FormLabel>Discount Amount</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={field.value ?? ""}
+                        onChange={(event) =>
+                          field.onChange(event.target.valueAsNumber)
+                        }
+                        disabled={form.formState.isSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : null}
+
+            {watchedValues.discountType === "none" ? (
+              <FormItem className="min-w-0">
+                <FormLabel>Discount Value</FormLabel>
+                <FormControl>
+                  <Input value="" disabled placeholder="No discount" />
+                </FormControl>
+              </FormItem>
+            ) : null}
+          </div>
 
           <FormField
             control={form.control}
             name="taxRate"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="min-w-0">
                 <FormLabel>Tax %</FormLabel>
                 <FormControl>
                   <Input
@@ -365,12 +386,14 @@ export function InvoiceForm({
           </CardContent>
         </Card>
 
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting && (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          )}
-          {submitLabel ?? (isEditing ? "Save Draft Changes" : "Create Draft")}
-        </Button>
+        {!hideSubmitButton && (
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            {submitLabel ?? (isEditing ? "Save Draft Changes" : "Create Draft")}
+          </Button>
+        )}
       </form>
     </Form>
   );

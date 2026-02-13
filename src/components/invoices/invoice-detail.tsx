@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
-import { ArrowLeft, Download, FileText, Pencil } from "lucide-react";
+import { ArrowLeft, Download, FileText, Loader2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -38,6 +38,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -160,6 +161,7 @@ export function InvoiceDetail({
   const [recordPaymentOpen, setRecordPaymentOpen] = useState(false);
   const [editingPaymentId, setEditingPaymentId] = useState<string | null>(null);
   const [deletePaymentId, setDeletePaymentId] = useState<string | null>(null);
+  const [isEditDraftSubmitting, setIsEditDraftSubmitting] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const [nonFinancialDueDate, setNonFinancialDueDate] = useState(invoice.dueDate);
@@ -643,7 +645,15 @@ export function InvoiceDetail({
         </Card>
       )}
 
-      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+      <Dialog
+        open={editOpen}
+        onOpenChange={(open) => {
+          setEditOpen(open);
+          if (!open) {
+            setIsEditDraftSubmitting(false);
+          }
+        }}
+      >
         <DialogContent className="max-w-4xl p-0 max-h-[92vh] overflow-hidden">
           <DialogHeader className="px-6 pt-6">
             <DialogTitle>Edit Invoice Draft</DialogTitle>
@@ -651,19 +661,35 @@ export function InvoiceDetail({
               Update draft fields and line items before sending.
             </DialogDescription>
           </DialogHeader>
-          <div className="overflow-y-auto px-6 pb-6 max-h-[calc(92vh-8rem)]">
+          <div className="overflow-y-auto px-6 pb-6 max-h-[calc(92vh-12.5rem)]">
             <InvoiceForm
               mode="edit"
               invoiceId={invoice.id}
               customers={customers}
               initialData={toInvoiceFormData(invoice)}
               submitLabel="Save Draft"
+              formId="invoice-edit-draft-form"
+              hideSubmitButton
+              onSubmittingChange={setIsEditDraftSubmitting}
               onSuccess={() => {
                 setEditOpen(false);
+                setIsEditDraftSubmitting(false);
                 router.refresh();
               }}
             />
           </div>
+          <DialogFooter className="sticky bottom-0 border-t bg-background px-6 py-4 sm:justify-end">
+            <Button
+              type="submit"
+              form="invoice-edit-draft-form"
+              disabled={isEditDraftSubmitting}
+            >
+              {isEditDraftSubmitting && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Save Draft
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
