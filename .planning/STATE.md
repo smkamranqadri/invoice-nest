@@ -5,23 +5,24 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Teams can create invoices, send them to customers, and know exactly who owes what -- without spreadsheets or expensive SaaS tools.
-**Current focus:** Phase 4 - Payments & PDF Generation (Verification Complete)
+**Current focus:** Phase 5 - Dashboard, Settings & Polish (Execution Complete, Human Verification Pending)
 
 ## Current Position
 
-Phase: 4 of 6 (Payments & PDF Generation) -- Verification Complete
-Plan: Verification artifacts created for implemented Phase 4 scope (no standalone PLAN.md existed)
-Status: Automated checks passed; manual UAT 12/12 passed including targeted UAT-11 retest
-Last activity: 2026-02-13 -- Closed /gsd:verify-work 4 by confirming UAT-11 (sticky save footer, discount layout, long-PDF pagination)
+Phase: 5 of 6 (Dashboard, Settings & Polish) -- Execution Complete
+Plan: 05-01, 05-02, and 05-03 executed with summaries and atomic task commits
+Status: Automated checks pass (`npm run lint`, `npm run build`); human verification pending via `05-VERIFICATION.md`
+Last activity: 2026-02-13 -- Completed `/gsd:execute-phase 5` implementation wave, including dashboard live metrics, settings enhancements, clone flow, and CSV exports
+Pause state: Continue with human verification closure before Phase 6 planning
 
-Progress: [█████████░] 90%
+Progress: [█████████▓] 96%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 9 min
-- Total execution time: 1.21 hours
+- Total plans completed: 11
+- Average duration: 8 min
+- Total execution time: 1.34 hours
 
 **By Phase:**
 
@@ -29,10 +30,11 @@ Progress: [█████████░] 90%
 |-------|-------|-------|----------|
 | 01-auth-workspaces-ui-foundation | 5 | 67 min | 13 min |
 | 02-customer-management | 3 | 6 min | 2 min |
+| 05-dashboard-settings-polish | 3 | 25 min | 8 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-04 (2 min), 01-05 (45 min), 02-01 (2 min), 02-02 (2 min), 02-03 (2 min)
-- Trend: 02-03 fast -- detail page assembly from existing data layer and components
+- Last 5 plans: 02-02 (2 min), 02-03 (2 min), 05-01 (8 min), 05-02 (7 min), 05-03 (10 min)
+- Trend: Phase 5 steady with medium-complexity feature slices and clean verification loops
 
 *Updated after each plan completion*
 
@@ -76,6 +78,11 @@ Recent decisions affecting current work:
 - [04-DECISION]: `partially_paid` is a display status (persisted statuses remain `draft/sent/paid/void`)
 - [04-DECISION]: Payment on draft auto-sends invoice before recording payment
 - [04-DECISION]: PDF supports `draft/sent/paid/void` and uses optional logo with text fallback
+- [05-DECISION]: Workspace settings metadata now uses a typed parser/serializer preserving timezone and unknown metadata keys
+- [05-DECISION]: Default currency and tax presets are owner-managed settings, with tax presets consumable in invoice draft UI
+- [05-DECISION]: Dashboard period selector supports month/quarter/year, defaulting to month
+- [05-DECISION]: Invoice clone creates a new draft with copied commercial fields and reset payment lifecycle state
+- [05-DECISION]: CSV export route supports `invoices`, `payments`, and `combined` datasets with formula-safe escaping
 
 ### Pending Todos
 
@@ -85,6 +92,7 @@ None yet.
 
 - ~~[Research]: Tailwind CSS v4 + shadcn/ui compatibility needs verification before Phase 1 implementation~~ RESOLVED: Tailwind v4 + shadcn/ui works perfectly (verified in 01-01)
 - ~~[Research]: better-auth organizations plugin API needs hands-on validation during Phase 1 planning~~ RESOLVED: better-auth org plugin schema generated and tables migrated successfully (verified in 01-01)
+- [Verification]: Run `/gsd:verify-work 5` to close manual checks in `.planning/phases/05-dashboard-settings-polish/05-VERIFICATION.md`
 
 ### Phase 4 Discovery (2026-02-13)
 
@@ -120,6 +128,20 @@ None yet.
   - Sticky edit-draft modal save footer to keep submit action visible while scrolling
   - Discount/tax row layout stabilization (`md:grid-cols-3`, full-width select trigger, `min-w-0` controls)
 
+### Phase 5 Execution (2026-02-13)
+
+- Plans executed:
+  - `.planning/phases/05-dashboard-settings-polish/05-01-SUMMARY.md`
+  - `.planning/phases/05-dashboard-settings-polish/05-02-SUMMARY.md`
+  - `.planning/phases/05-dashboard-settings-polish/05-03-SUMMARY.md`
+- Implemented scope outcomes:
+  - Owner settings now include logo URL, default currency, and tax presets
+  - Invoice creation supports workspace tax preset application and currency-aware totals preview
+  - Dashboard now renders live outstanding/overdue/revenue KPIs plus recent invoice activity
+  - Invoice cloning and CSV exports are available from invoice management surfaces
+- Verification artifact:
+  - `.planning/phases/05-dashboard-settings-polish/05-VERIFICATION.md` (status: `human_verification_needed`)
+
 ### Quick Tasks Completed
 
 | # | Description | Date | Commit | Directory |
@@ -132,6 +154,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-13
-Stopped at: Phase 4 verification complete and ready for next planning cycle
-Resume file: .planning/phases/04-payments-pdf-generation/VERIFICATION.md
-Next recommended command: /gsd:plan-phase 5
+Stopped at: Phase 5 execution complete; waiting on manual verification sign-off
+Resume file: .planning/continue-here.md
+Next recommended command: /gsd:verify-work 5

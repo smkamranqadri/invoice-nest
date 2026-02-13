@@ -8,8 +8,8 @@ InvoiceNest delivers a self-hosted invoicing workspace for small businesses, bui
 
 - [x] **Phase 1: Auth, Workspaces & UI Foundation** - Users can sign up, create workspaces, invite members, and operate within a role-based multi-tenant environment
 - [x] **Phase 2: Customer Management** - Users can manage their customer directory with full CRUD, search, filtering, and status tracking
-- [ ] **Phase 3: Invoice Creation** - Users can create, edit, and manage invoices with line items, tax, discounts, and status workflows
-- [ ] **Phase 4: Payments & PDF Generation** - Users can record payments against invoices and generate professional PDF documents
+- [x] **Phase 3: Invoice Creation** - Users can create, edit, and manage invoices with line items, tax, discounts, and status workflows
+- [x] **Phase 4: Payments & PDF Generation** - Users can record payments against invoices and generate professional PDF documents
 - [ ] **Phase 5: Dashboard, Settings & Polish** - Users see a financial overview dashboard and can configure workspace settings, clone invoices, and export data
 - [ ] **Phase 6: Docker Deployment** - Application runs via `docker compose up` with persistent data and production-ready configuration
 
@@ -96,9 +96,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md -- Workspace settings metadata + owner UI for branding, currency, and tax presets
-- [ ] 05-02-PLAN.md -- Dashboard financial metrics and recent invoice overview
-- [ ] 05-03-PLAN.md -- Invoice clone workflow and CSV exports
+- [x] 05-01-PLAN.md -- Workspace settings metadata + owner UI for branding, currency, and tax presets
+- [x] 05-02-PLAN.md -- Dashboard financial metrics and recent invoice overview
+- [x] 05-03-PLAN.md -- Invoice clone workflow and CSV exports
 
 ### Phase 6: Docker Deployment
 **Goal**: Application is containerized and runnable with a single `docker compose up` command, with persistent data and production-ready configuration
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 |-------|---------------|--------|-----------|
 | 1. Auth, Workspaces & UI Foundation | 5/5 | ✓ Complete | 2026-02-13 |
 | 2. Customer Management | 3/3 | ✓ Complete | 2026-02-13 |
-| 3. Invoice Creation | 0/TBD | Not started | - |
-| 4. Payments & PDF Generation | 0/TBD | Not started | - |
-| 5. Dashboard, Settings & Polish | 0/TBD | Not started | - |
+| 3. Invoice Creation | Implemented | ✓ Complete | 2026-02-13 |
+| 4. Payments & PDF Generation | Implemented | ✓ Complete | 2026-02-13 |
+| 5. Dashboard, Settings & Polish | 3/3 | In verification | - |
 | 6. Docker Deployment | 0/TBD | Not started | - |
