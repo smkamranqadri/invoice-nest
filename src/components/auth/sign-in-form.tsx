@@ -53,7 +53,16 @@ export function SignInForm() {
         return;
       }
 
-      router.push("/dashboard");
+      // Check if user has organizations and set one as active
+      const orgsResult = await authClient.organization.list();
+      if (orgsResult.data && orgsResult.data.length > 0) {
+        // Set the first organization as active (could be most recent in future)
+        await authClient.organization.setActive({
+          organizationId: orgsResult.data[0].id,
+        });
+      }
+
+      window.location.href = "/dashboard";
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
