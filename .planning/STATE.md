@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Teams can create invoices, send them to customers, and know exactly who owes what -- without spreadsheets or expensive SaaS tools.
-**Current focus:** Phase 3 - Invoice Creation
+**Current focus:** Phase 4 - Payments & PDF Generation (Planning Ready)
 
 ## Current Position
 
-Phase: 3 of 6 (Invoice Creation)
-Plan: 0 of TBD in current phase
-Status: Ready for Planning
-Last activity: 2026-02-13 -- Human verification completed for Phase 2 (all checks passed)
+Phase: 3 of 6 (Invoice Creation) -- Verified Complete
+Plan: 3 execution items completed and verified (03-01, 03-02, 03-03)
+Status: Human Verification Passed (Phase 3 complete)
+Last activity: 2026-02-13 -- Finalized Phase 3 verification with user-confirmed manual UAT pass (/gsd:verify-work 3)
 
-Progress: [█████░░░░░] 47%
+Progress: [███████░░░] 70%
 
 ## Performance Metrics
 
@@ -66,6 +66,11 @@ Recent decisions affecting current work:
 - [02-02]: URL-based search/filter state for shareable and browser-back-compatible customer list filtering
 - [02-02]: Debounced search (300ms) to avoid excessive server re-fetches on keystroke
 - [02-02]: Emerald green badge for active customer status matching primary color theme
+- [03-01]: Invoice numbers use per-workspace sequence (`INV-0001`) with transactional increment and unique constraint
+- [03-01]: Invoice totals are canonical server-calculated integer cents with half-up rounding
+- [03-02]: Sent invoices are read-only except due date edit; void action is owner-only
+- [03-03]: Overdue is derived from `sent` + past due date in workspace timezone; list defaults to `updatedAt desc`
+- [03-VERIFY]: Manual UAT for Phase 3 passed on 2026-02-13; remaining gaps (focused tests, timezone fallback warning log) are tracked as non-blocking follow-ups
 
 ### Pending Todos
 
@@ -89,6 +94,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-13
-Stopped at: Completed conversational/manual UAT for Phase 2 with all PASS results
-Resume file: .planning/phases/02-customer-management/02-VERIFICATION.md
-Next recommended command: /gsd:plan-phase 3
+Stopped at: Completed Phase 3 verification (automated + manual UAT pass); ready to begin Phase 4 planning
+Resume file: .planning/phases/03-invoice-creation/03-VERIFICATION.md
+Next recommended command: /gsd:plan-phase 4
