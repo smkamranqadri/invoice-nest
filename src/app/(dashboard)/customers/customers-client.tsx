@@ -39,13 +39,11 @@ interface Customer {
 interface CustomersClientProps {
   customers: Customer[];
   initialSearch: string;
-  initialStatus: string;
 }
 
 export function CustomersClient({
   customers,
   initialSearch,
-  initialStatus,
 }: CustomersClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();

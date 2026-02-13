@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { customer } from "@/lib/db/schema";
 import { eq, and, or, ilike, desc, type SQL } from "drizzle-orm";
+import { getCustomerInvoiceSummary } from "./invoice";
 
 export async function getCustomers(
   organizationId: string,
@@ -43,4 +44,27 @@ export async function getCustomerById(
     );
 
   return result ?? null;
+}
+
+export async function getCustomerDetailWithInvoices(
+  organizationId: string,
+  customerId: string,
+  timeZone = "UTC",
+) {
+  const foundCustomer = await getCustomerById(organizationId, customerId);
+  if (!foundCustomer) {
+    return null;
+  }
+
+  const invoiceSummary = await getCustomerInvoiceSummary(
+    organizationId,
+    customerId,
+    timeZone,
+  );
+
+  return {
+    ...foundCustomer,
+    outstandingBalanceCents: invoiceSummary.outstandingBalanceCents,
+    invoices: invoiceSummary.invoices,
+  };
 }

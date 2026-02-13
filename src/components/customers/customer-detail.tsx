@@ -8,7 +8,6 @@ import {
   Phone,
   MapPin,
   Calendar,
-  DollarSign,
   FileText,
   Pencil,
 } from "lucide-react";
@@ -16,6 +15,7 @@ import { toast } from "sonner";
 
 import { toggleCustomerStatus } from "@/lib/actions/customer";
 import { CustomerStatusBadge } from "@/components/customers/customer-status-badge";
+import { InvoiceStatusBadge } from "@/components/invoices/invoice-status-badge";
 import { CustomerForm } from "@/components/customers/customer-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,9 +45,37 @@ interface CustomerDetailProps {
     createdAt: Date;
     updatedAt: Date;
   };
+  outstandingBalanceCents: number;
+  invoices: {
+    id: string;
+    invoiceNumber: string;
+    displayStatus: "draft" | "sent" | "overdue" | "paid" | "void";
+    dueDate: string;
+    totalCents: number;
+    updatedAt: Date;
+  }[];
 }
 
-export function CustomerDetail({ customer }: CustomerDetailProps) {
+function formatCurrencyFromCents(amountCents: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(amountCents / 100);
+}
+
+function formatDate(value: string | Date) {
+  return new Date(value).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+export function CustomerDetail({
+  customer,
+  outstandingBalanceCents,
+  invoices,
+}: CustomerDetailProps) {
   const [editOpen, setEditOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -156,10 +184,13 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
             <CardTitle className="text-base">Outstanding Balance</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* TODO Phase 3: compute outstanding balance from sum of unpaid invoices */}
-            <p className="text-3xl font-bold">$0.00</p>
+            <p className="text-3xl font-bold">
+              {formatCurrencyFromCents(outstandingBalanceCents)}
+            </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              No invoices yet
+              {invoices.length === 0
+                ? "No invoices yet"
+                : `${invoices.length} invoice${invoices.length === 1 ? "" : "s"} linked`}
             </p>
           </CardContent>
         </Card>
@@ -174,16 +205,40 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* TODO Phase 3: render invoice list filtered by this customer */}
-          <div className="flex flex-col items-center justify-center py-8 text-center">
-            <div className="rounded-full bg-muted p-3 mb-3">
-              <FileText className="h-6 w-6 text-muted-foreground" />
+          {invoices.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="rounded-full bg-muted p-3 mb-3">
+                <FileText className="h-6 w-6 text-muted-foreground" />
+              </div>
+              <p className="text-sm font-medium">No invoices yet</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Invoices for this customer will appear here once created.
+              </p>
             </div>
-            <p className="text-sm font-medium">No invoices yet</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Invoices for this customer will appear here once created.
-            </p>
-          </div>
+          ) : (
+            <div className="space-y-2">
+              {invoices.map((invoice) => (
+                <Link
+                  key={invoice.id}
+                  href={`/invoices/${invoice.id}`}
+                  className="flex items-center justify-between rounded-md border p-3 hover:bg-muted/50 transition-colors"
+                >
+                  <div>
+                    <p className="text-sm font-medium">{invoice.invoiceNumber}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Due {formatDate(invoice.dueDate)}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <InvoiceStatusBadge status={invoice.displayStatus} />
+                    <p className="text-sm font-semibold">
+                      {formatCurrencyFromCents(invoice.totalCents)}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 

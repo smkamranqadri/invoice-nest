@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation";
-import { getRequiredOrganization } from "@/lib/queries/workspace";
-import { getCustomerById } from "@/lib/queries/customer";
+import {
+  getOrganizationTimeZone,
+  getRequiredOrganization,
+} from "@/lib/queries/workspace";
+import { getCustomerDetailWithInvoices } from "@/lib/queries/customer";
 import { CustomerDetail } from "@/components/customers/customer-detail";
 
 export default async function CustomerDetailPage({
@@ -10,11 +13,22 @@ export default async function CustomerDetailPage({
 }) {
   const { id } = await params;
   const { organizationId } = await getRequiredOrganization();
-  const customer = await getCustomerById(organizationId, id);
+  const timeZone = await getOrganizationTimeZone(organizationId);
+  const customer = await getCustomerDetailWithInvoices(
+    organizationId,
+    id,
+    timeZone,
+  );
 
   if (!customer) {
     notFound();
   }
 
-  return <CustomerDetail customer={customer} />;
+  return (
+    <CustomerDetail
+      customer={customer}
+      outstandingBalanceCents={customer.outstandingBalanceCents}
+      invoices={customer.invoices}
+    />
+  );
 }

@@ -20,7 +20,6 @@ export default async function CustomersPage({
     <CustomersClient
       customers={customers}
       initialSearch={params.search ?? ""}
-      initialStatus={status}
     />
   );
 }
