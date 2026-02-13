@@ -5,33 +5,34 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Teams can create invoices, send them to customers, and know exactly who owes what -- without spreadsheets or expensive SaaS tools.
-**Current focus:** Phase 1 - Auth, Workspaces & UI Foundation
+**Current focus:** Phase 2 - Customer Management
 
 ## Current Position
 
-Phase: 1 of 6 (Auth, Workspaces & UI Foundation)
-Plan: 5 of 5 in current phase
-Status: Phase Complete
-Last activity: 2026-02-13 -- Completed quick task 4: Create landing page for InvoiceNest
+Phase: 2 of 6 (Customer Management)
+Plan: 1 of 3 in current phase
+Status: In Progress
+Last activity: 2026-02-13 -- Completed 02-01: Customer Data Layer
 
-Progress: [██████████] 100%
+Progress: [███░░░░░░░] 33%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 13 min
-- Total execution time: 1.12 hours
+- Total plans completed: 6
+- Average duration: 12 min
+- Total execution time: 1.15 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-auth-workspaces-ui-foundation | 5 | 67 min | 13 min |
+| 02-customer-management | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (14 min), 01-02 (3 min), 01-03 (3 min), 01-04 (2 min), 01-05 (45 min)
-- Trend: 01-05 longer due to human verification + 6 bug fixes found during testing
+- Last 5 plans: 01-02 (3 min), 01-03 (3 min), 01-04 (2 min), 01-05 (45 min), 02-01 (2 min)
+- Trend: 02-01 fast -- pure backend data layer, no UI
 
 *Updated after each plan completion*
 
@@ -60,6 +61,8 @@ Recent decisions affecting current work:
 - [01-05]: Accept-invitation page placed outside dashboard route group (public route for unauthenticated invitees)
 - [01-05]: Sign-in calls organization.setActive() for returning users with existing workspaces
 - [01-05]: Sign-up form supports callbackUrl for invitation flow redirect
+- [02-01]: Conditions array pattern for composable Drizzle query filters
+- [02-01]: Empty strings from form inputs converted to null in server actions
 
 ### Pending Todos
 
@@ -83,5 +86,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-13
-Stopped at: Completed quick-4: Create landing page for InvoiceNest
-Resume file: .planning/quick/4-create-landing-page-for-invoicenest/4-SUMMARY.md
+Stopped at: Completed 02-01-PLAN.md (Customer Data Layer)
+Resume file: .planning/phases/02-customer-management/02-01-SUMMARY.md
