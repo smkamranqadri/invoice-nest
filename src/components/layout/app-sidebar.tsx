@@ -22,6 +22,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { SidebarUserMenu } from "@/components/layout/sidebar-user-menu";
+import { WorkspaceSwitcher } from "@/components/layout/workspace-switcher";
 
 const navItems = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -50,12 +52,7 @@ export function AppSidebar({ user, activeOrganization }: AppSidebarProps) {
   return (
     <Sidebar>
       <SidebarHeader>
-        {/* Workspace switcher will be added in Task 2 */}
-        <div className="flex items-center gap-2 px-2 py-1">
-          <span className="text-sm font-semibold truncate">
-            {activeOrganization?.name ?? "InvoiceNest"}
-          </span>
-        </div>
+        <WorkspaceSwitcher activeOrganization={activeOrganization ?? null} />
       </SidebarHeader>
 
       <SidebarContent>
@@ -83,15 +80,7 @@ export function AppSidebar({ user, activeOrganization }: AppSidebarProps) {
       </SidebarContent>
 
       <SidebarFooter>
-        {/* User menu will be added in Task 2 */}
-        <div className="flex items-center gap-2 px-2 py-1">
-          <div className="flex flex-col text-sm">
-            <span className="font-medium truncate">{user.name}</span>
-            <span className="text-xs text-muted-foreground truncate">
-              {user.email}
-            </span>
-          </div>
-        </div>
+        <SidebarUserMenu user={user} />
       </SidebarFooter>
     </Sidebar>
   );
