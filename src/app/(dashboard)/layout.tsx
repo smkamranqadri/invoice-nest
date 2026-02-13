@@ -29,6 +29,11 @@ export default async function DashboardLayout({
     headers: await headers(),
   });
 
+  // Get user's role in the active organization for role-based navigation
+  const activeMember = await auth.api.getActiveMember({
+    headers: await headers(),
+  });
+
   return (
     <SidebarProvider>
       <AppSidebar
@@ -46,6 +51,7 @@ export default async function DashboardLayout({
               }
             : null
         }
+        userRole={activeMember?.role}
       />
       <div className="flex flex-1 flex-col">
         <Header />

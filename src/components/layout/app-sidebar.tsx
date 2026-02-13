@@ -26,11 +26,11 @@ import { SidebarUserMenu } from "@/components/layout/sidebar-user-menu";
 import { WorkspaceSwitcher } from "@/components/layout/workspace-switcher";
 
 const navItems = [
-  { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { title: "Customers", href: "/customers", icon: Users },
-  { title: "Invoices", href: "/invoices", icon: FileText },
-  { title: "Members", href: "/members", icon: UserPlus },
-  { title: "Settings", href: "/settings", icon: Settings },
+  { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard, ownerOnly: false },
+  { title: "Customers", href: "/customers", icon: Users, ownerOnly: false },
+  { title: "Invoices", href: "/invoices", icon: FileText, ownerOnly: false },
+  { title: "Members", href: "/members", icon: UserPlus, ownerOnly: true },
+  { title: "Settings", href: "/settings", icon: Settings, ownerOnly: true },
 ];
 
 interface AppSidebarProps {
@@ -44,10 +44,16 @@ interface AppSidebarProps {
     name: string;
     slug: string;
   } | null;
+  userRole?: string;
 }
 
-export function AppSidebar({ user, activeOrganization }: AppSidebarProps) {
+export function AppSidebar({ user, activeOrganization, userRole }: AppSidebarProps) {
   const pathname = usePathname();
+  const isOwner = userRole === "owner";
+
+  const visibleNavItems = navItems.filter(
+    (item) => !item.ownerOnly || isOwner
+  );
 
   return (
     <Sidebar>
@@ -60,7 +66,7 @@ export function AppSidebar({ user, activeOrganization }: AppSidebarProps) {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
+              {visibleNavItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     asChild
