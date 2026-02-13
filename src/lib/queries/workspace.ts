@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { isValidTimeZone } from "@/lib/domain/date";
+import { parseWorkspaceSettingsMetadata } from "@/lib/workspace/settings";
 
 export async function getRequiredSession() {
   const session = await auth.api.getSession({
@@ -31,38 +31,29 @@ export async function getFullOrganization(organizationId: string) {
   });
 }
 
-function extractTimeZone(metadata: unknown): string | null {
-  if (!metadata) return null;
-
-  if (typeof metadata === "string") {
-    try {
-      return extractTimeZone(JSON.parse(metadata));
-    } catch {
-      return null;
-    }
+export async function getWorkspaceSettings(organizationId: string) {
+  const organization = await getFullOrganization(organizationId);
+  if (!organization) {
+    return null;
   }
 
-  if (typeof metadata === "object") {
-    const timezone =
-      (metadata as Record<string, unknown>).timezone ??
-      (metadata as Record<string, unknown>).timeZone;
+  const metadata = (organization as { metadata?: unknown }).metadata;
+  const parsedMetadata = parseWorkspaceSettingsMetadata(metadata);
 
-    if (typeof timezone === "string" && isValidTimeZone(timezone)) {
-      return timezone;
-    }
-  }
-
-  return null;
+  return {
+    name: organization.name,
+    slug: organization.slug,
+    logoUrl: typeof organization.logo === "string" ? organization.logo : "",
+    metadata,
+    settings: parsedMetadata,
+  };
 }
 
 export async function getOrganizationTimeZone(organizationId: string) {
-  const organization = await getFullOrganization(organizationId);
-  if (!organization) {
+  const workspace = await getWorkspaceSettings(organizationId);
+  if (!workspace) {
     return "UTC";
   }
 
-  const timeZone = extractTimeZone(
-    (organization as { metadata?: unknown }).metadata,
-  );
-  return timeZone ?? "UTC";
+  return workspace.settings.timeZone ?? "UTC";
 }
