@@ -1,8 +1,12 @@
 "use client";
 
+import { useTransition } from "react";
 import Link from "next/link";
-import { Download, Eye, MoreHorizontal } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { CopyPlus, Download, Eye, MoreHorizontal } from "lucide-react";
+import { toast } from "sonner";
 
+import { cloneInvoiceToDraft } from "@/lib/actions/invoice";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -41,6 +45,23 @@ function formatDate(value: string | Date) {
 }
 
 export function InvoiceTable({ invoices }: InvoiceTableProps) {
+  const router = useRouter();
+  const [isCloning, startTransition] = useTransition();
+
+  function handleClone(invoiceId: string) {
+    startTransition(async () => {
+      const result = await cloneInvoiceToDraft(invoiceId);
+      if (result.error) {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success("Invoice cloned as draft");
+      router.push(`/invoices/${result.data!.id}`);
+      router.refresh();
+    });
+  }
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -76,16 +97,26 @@ export function InvoiceTable({ invoices }: InvoiceTableProps) {
                       <span className="sr-only">Open menu</span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href={`/invoices/${invoice.id}`}>
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Details
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <a href={`/invoices/${invoice.id}/pdf`} target="_blank" rel="noreferrer">
-                        <Download className="mr-2 h-4 w-4" />
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link href={`/invoices/${invoice.id}`}>
+                          <Eye className="mr-2 h-4 w-4" />
+                          View Details
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        disabled={isCloning || invoice.status === "void"}
+                        onSelect={(event) => {
+                          event.preventDefault();
+                          handleClone(invoice.id);
+                        }}
+                      >
+                        <CopyPlus className="mr-2 h-4 w-4" />
+                        Clone as Draft
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <a href={`/invoices/${invoice.id}/pdf`} target="_blank" rel="noreferrer">
+                          <Download className="mr-2 h-4 w-4" />
                         Download PDF
                       </a>
                     </DropdownMenuItem>

@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FileText, Plus } from "lucide-react";
+import { Download, FileText, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,9 +44,29 @@ export function InvoicesClient({ invoices }: InvoicesClientProps) {
     [router, searchParams],
   );
 
+  const buildExportHref = useCallback(
+    (dataset: "invoices" | "payments" | "combined") => {
+      const params = new URLSearchParams();
+      params.set("dataset", dataset);
+
+      if (status !== "all") {
+        params.set("status", status);
+      }
+      if (from) {
+        params.set("from", from);
+      }
+      if (to) {
+        params.set("to", to);
+      }
+
+      return `/invoices/export?${params.toString()}`;
+    },
+    [status, from, to],
+  );
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
             <FileText className="h-6 w-6" />
@@ -56,12 +76,26 @@ export function InvoicesClient({ invoices }: InvoicesClientProps) {
             {invoices.length} invoice{invoices.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <Button asChild>
-          <Link href="/invoices/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Create Invoice
-          </Link>
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" asChild>
+            <a href={buildExportHref("invoices")}>
+              <Download className="mr-2 h-4 w-4" />
+              Export Invoices CSV
+            </a>
+          </Button>
+          <Button variant="outline" asChild>
+            <a href={buildExportHref("payments")}>
+              <Download className="mr-2 h-4 w-4" />
+              Export Payments CSV
+            </a>
+          </Button>
+          <Button asChild>
+            <Link href="/invoices/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Create Invoice
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-3 md:grid-cols-4">

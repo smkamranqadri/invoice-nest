@@ -2,11 +2,12 @@
 
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
-import { ArrowLeft, Download, FileText, Loader2, Pencil } from "lucide-react";
+import { ArrowLeft, CopyPlus, Download, FileText, Loader2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import {
+  cloneInvoiceToDraft,
   sendInvoice,
   updateInvoiceNonFinancial,
   voidInvoice,
@@ -182,6 +183,7 @@ export function InvoiceDetail({
   const canRecordPayments = invoice.status !== "void" && invoice.amountDueCents > 0;
   const canEditNonFinancial = invoice.status === "sent" || invoice.status === "paid";
   const canEditDraft = invoice.status === "draft" && !invoice.hasPaymentHistory;
+  const canCloneInvoice = invoice.status !== "void";
 
   const editingPayment = useMemo(
     () => invoice.payments.find((payment) => payment.id === editingPaymentId) ?? null,
@@ -230,6 +232,20 @@ export function InvoiceDetail({
       }
 
       toast.success("Invoice voided");
+      router.refresh();
+    });
+  }
+
+  function handleClone() {
+    startTransition(async () => {
+      const result = await cloneInvoiceToDraft(invoice.id);
+      if (result.error) {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success("Invoice cloned as draft");
+      router.push(`/invoices/${result.data!.id}`);
       router.refresh();
     });
   }
@@ -388,6 +404,13 @@ export function InvoiceDetail({
               Download PDF
             </a>
           </Button>
+
+          {canCloneInvoice && (
+            <Button variant="outline" size="sm" onClick={handleClone} disabled={isPending}>
+              <CopyPlus className="mr-1.5 h-4 w-4" />
+              Clone as Draft
+            </Button>
+          )}
 
           {canVoidThisInvoice && (
             <Button
