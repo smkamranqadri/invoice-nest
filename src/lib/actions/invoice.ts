@@ -31,6 +31,7 @@ import { requireOwnerRole } from "@/lib/queries/members";
 import { getTodayIsoDateInTimeZone } from "@/lib/domain/date";
 
 function revalidateInvoicePaths(invoiceId: string, customerId: string) {
+  revalidatePath("/dashboard");
   revalidatePath("/invoices");
   revalidatePath(`/invoices/${invoiceId}`);
   revalidatePath("/customers");
@@ -162,6 +163,147 @@ export async function createInvoiceDraft(input: unknown) {
     };
   } catch {
     return { error: "Failed to create invoice draft" };
+  }
+}
+
+export async function cloneInvoiceToDraft(invoiceId: string) {
+  const { organizationId } = await getRequiredOrganization();
+
+  const [sourceInvoice] = await db
+    .select({
+      id: invoice.id,
+      customerId: invoice.customerId,
+      status: invoice.status,
+      dueDate: invoice.dueDate,
+      notes: invoice.notes,
+      terms: invoice.terms,
+      subtotalCents: invoice.subtotalCents,
+      discountType: invoice.discountType,
+      discountRateHundredths: invoice.discountRateHundredths,
+      discountAmountCents: invoice.discountAmountCents,
+      discountCents: invoice.discountCents,
+      taxRateHundredths: invoice.taxRateHundredths,
+      taxCents: invoice.taxCents,
+      totalCents: invoice.totalCents,
+    })
+    .from(invoice)
+    .where(and(eq(invoice.organizationId, organizationId), eq(invoice.id, invoiceId)));
+
+  if (!sourceInvoice) {
+    return { error: "Invoice not found" };
+  }
+
+  if (sourceInvoice.status === "void") {
+    return { error: "Void invoices cannot be cloned" };
+  }
+
+  const customerCheck = await ensureActiveCustomer(
+    organizationId,
+    sourceInvoice.customerId,
+    sourceInvoice.customerId,
+  );
+  if (customerCheck.error) {
+    return { error: customerCheck.error };
+  }
+
+  const sourceLineItems = await db
+    .select({
+      position: invoiceLineItem.position,
+      description: invoiceLineItem.description,
+      quantityHundredths: invoiceLineItem.quantityHundredths,
+      unitPriceCents: invoiceLineItem.unitPriceCents,
+      lineTotalCents: invoiceLineItem.lineTotalCents,
+    })
+    .from(invoiceLineItem)
+    .where(
+      and(
+        eq(invoiceLineItem.organizationId, organizationId),
+        eq(invoiceLineItem.invoiceId, invoiceId),
+      ),
+    )
+    .orderBy(invoiceLineItem.position);
+
+  if (sourceLineItems.length === 0) {
+    return { error: "Cannot clone an invoice without line items" };
+  }
+
+  const timeZone = await getOrganizationTimeZone(organizationId);
+  const issueDate = getTodayIsoDateInTimeZone(timeZone);
+  const clonedInvoiceId = createId();
+
+  try {
+    const clonedInvoice = await db.transaction(async (tx) => {
+      const [sequence] = await tx
+        .insert(invoiceSequence)
+        .values({
+          organizationId,
+          currentValue: 1,
+        })
+        .onConflictDoUpdate({
+          target: invoiceSequence.organizationId,
+          set: {
+            currentValue: sql`${invoiceSequence.currentValue} + 1`,
+          },
+        })
+        .returning({
+          currentValue: invoiceSequence.currentValue,
+        });
+
+      const invoiceNumber = `INV-${String(sequence.currentValue).padStart(4, "0")}`;
+
+      const [created] = await tx
+        .insert(invoice)
+        .values({
+          id: clonedInvoiceId,
+          organizationId,
+          customerId: sourceInvoice.customerId,
+          invoiceNumber,
+          status: "draft",
+          issueDate,
+          dueDate: sourceInvoice.dueDate,
+          notes: sourceInvoice.notes,
+          terms: sourceInvoice.terms,
+          subtotalCents: sourceInvoice.subtotalCents,
+          discountType: sourceInvoice.discountType,
+          discountRateHundredths: sourceInvoice.discountRateHundredths,
+          discountAmountCents: sourceInvoice.discountAmountCents,
+          discountCents: sourceInvoice.discountCents,
+          taxRateHundredths: sourceInvoice.taxRateHundredths,
+          taxCents: sourceInvoice.taxCents,
+          totalCents: sourceInvoice.totalCents,
+          amountPaidCents: 0,
+          amountDueCents: sourceInvoice.totalCents,
+          hasPaymentHistory: false,
+          sentAt: null,
+          voidedAt: null,
+        })
+        .returning({
+          id: invoice.id,
+          customerId: invoice.customerId,
+          invoiceNumber: invoice.invoiceNumber,
+          status: invoice.status,
+        });
+
+      await tx.insert(invoiceLineItem).values(
+        sourceLineItems.map((lineItem) => ({
+          id: createId(),
+          organizationId,
+          invoiceId: clonedInvoiceId,
+          position: lineItem.position,
+          description: lineItem.description,
+          quantityHundredths: lineItem.quantityHundredths,
+          unitPriceCents: lineItem.unitPriceCents,
+          lineTotalCents: lineItem.lineTotalCents,
+        })),
+      );
+
+      return created;
+    });
+
+    revalidateInvoicePaths(clonedInvoice.id, clonedInvoice.customerId);
+    return { data: clonedInvoice };
+  } catch {
+    return { error: "Failed to clone invoice" };
   }
 }
 
