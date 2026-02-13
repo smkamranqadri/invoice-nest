@@ -10,27 +10,27 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 1 of 6 (Auth, Workspaces & UI Foundation)
-Plan: 3 of 5 in current phase
+Plan: 4 of 5 in current phase
 Status: Executing
-Last activity: 2026-02-13 -- Completed 01-03 (Dashboard Shell Layout)
+Last activity: 2026-02-13 -- Completed 01-04 (Workspace Creation & Settings)
 
-Progress: [██████░░░░] 60%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 7 min
-- Total execution time: 0.33 hours
+- Total plans completed: 4
+- Average duration: 6 min
+- Total execution time: 0.37 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-auth-workspaces-ui-foundation | 3 | 20 min | 7 min |
+| 01-auth-workspaces-ui-foundation | 4 | 22 min | 6 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (14 min), 01-02 (3 min), 01-03 (3 min)
+- Last 5 plans: 01-01 (14 min), 01-02 (3 min), 01-03 (3 min), 01-04 (2 min)
 - Trend: accelerating
 
 *Updated after each plan completion*
@@ -53,6 +53,9 @@ Recent decisions affecting current work:
 - [01-03]: Server-side getFullOrganization call for sidebar org display rather than client-side fetch
 - [01-03]: window.location.reload after org switch to ensure server components re-evaluate
 - [01-03]: Single-org users see display-only workspace header; multi-org users get dropdown
+- [01-04]: Dashboard layout renders without sidebar when no activeOrganizationId (clean create-workspace page)
+- [01-04]: Owner-only settings access enforced via auth.api.getActiveMember() role check
+- [01-04]: Slug auto-generated from workspace name with manual override capability
 
 ### Pending Todos
 
@@ -67,5 +70,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-13
-Stopped at: Completed 01-03-PLAN.md (Dashboard Shell Layout)
-Resume file: .planning/phases/01-auth-workspaces-ui-foundation/01-03-SUMMARY.md
+Stopped at: Completed 01-04-PLAN.md (Workspace Creation & Settings)
+Resume file: .planning/phases/01-auth-workspaces-ui-foundation/01-04-SUMMARY.md
