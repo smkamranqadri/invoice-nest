@@ -10,7 +10,7 @@ import {
   createInvoiceDraftSchema,
   invoiceListFilterSchema,
   updateInvoiceDraftSchema,
-  updateSentInvoiceDueDateSchema,
+  updateInvoiceNonFinancialSchema,
   type InvoiceListFilterInput,
 } from "@/lib/validations/invoice";
 import { calculateInvoiceTotals } from "@/lib/domain/invoice-totals";
@@ -124,6 +124,9 @@ export async function createInvoiceDraft(input: unknown) {
           taxRateHundredths: totals.taxRateHundredths,
           taxCents: totals.taxCents,
           totalCents: totals.totalCents,
+          amountPaidCents: 0,
+          amountDueCents: totals.totalCents,
+          hasPaymentHistory: false,
         })
         .returning({
           id: invoice.id,
@@ -174,6 +177,7 @@ export async function updateInvoiceDraft(invoiceId: string, input: unknown) {
       id: invoice.id,
       status: invoice.status,
       customerId: invoice.customerId,
+      hasPaymentHistory: invoice.hasPaymentHistory,
     })
     .from(invoice)
     .where(and(eq(invoice.organizationId, organizationId), eq(invoice.id, invoiceId)));
@@ -184,6 +188,10 @@ export async function updateInvoiceDraft(invoiceId: string, input: unknown) {
 
   if (existingInvoice.status !== "draft") {
     return { error: "Only draft invoices can be fully edited" };
+  }
+
+  if (existingInvoice.hasPaymentHistory) {
+    return { error: "Financial fields are locked once any payment exists" };
   }
 
   const customerCheck = await ensureActiveCustomer(
@@ -214,6 +222,9 @@ export async function updateInvoiceDraft(invoiceId: string, input: unknown) {
           taxRateHundredths: totals.taxRateHundredths,
           taxCents: totals.taxCents,
           totalCents: totals.totalCents,
+          amountPaidCents: 0,
+          amountDueCents: totals.totalCents,
+          hasPaymentHistory: false,
         })
         .where(and(eq(invoice.organizationId, organizationId), eq(invoice.id, invoiceId)))
         .returning({
@@ -258,14 +269,14 @@ export async function updateInvoiceDraft(invoiceId: string, input: unknown) {
   }
 }
 
-export async function updateSentInvoiceDueDate(
+export async function updateInvoiceNonFinancial(
   invoiceId: string,
   input: unknown,
 ) {
   const { organizationId } = await getRequiredOrganization();
-  const parsed = updateSentInvoiceDueDateSchema.safeParse(input);
+  const parsed = updateInvoiceNonFinancialSchema.safeParse(input);
   if (!parsed.success) {
-    return { error: "Invalid due date" };
+    return { error: "Invalid invoice details" };
   }
 
   const [existingInvoice] = await db
@@ -281,20 +292,24 @@ export async function updateSentInvoiceDueDate(
     return { error: "Invoice not found" };
   }
 
-  if (existingInvoice.status !== "sent") {
-    return { error: "Only sent invoices can update due date here" };
+  if (existingInvoice.status !== "sent" && existingInvoice.status !== "paid") {
+    return { error: "Only sent or paid invoices can be edited here" };
   }
 
   const [updated] = await db
     .update(invoice)
     .set({
       dueDate: parsed.data.dueDate,
+      notes: parsed.data.notes || null,
+      terms: parsed.data.terms || null,
     })
     .where(and(eq(invoice.organizationId, organizationId), eq(invoice.id, invoiceId)))
     .returning({
       id: invoice.id,
       customerId: invoice.customerId,
       dueDate: invoice.dueDate,
+      notes: invoice.notes,
+      terms: invoice.terms,
     });
 
   if (!updated) {

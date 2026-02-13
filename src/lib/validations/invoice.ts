@@ -76,6 +76,14 @@ export const updateSentInvoiceDueDateSchema = z.object({
     .refine(isIsoDate, "Due date must be in YYYY-MM-DD format"),
 });
 
+export const updateInvoiceNonFinancialSchema = z.object({
+  dueDate: z
+    .string()
+    .refine(isIsoDate, "Due date must be in YYYY-MM-DD format"),
+  notes: z.string().max(5000).optional().or(z.literal("")),
+  terms: z.string().max(5000).optional().or(z.literal("")),
+});
+
 export const invoiceListFilterSchema = z.object({
   status: z.enum(FILTER_STATUSES).optional(),
   from: z.string().refine(isIsoDate, "From date must be YYYY-MM-DD").optional(),
@@ -91,6 +99,9 @@ export type CreateInvoiceDraftFormInput = z.input<typeof createInvoiceDraftSchem
 export type UpdateInvoiceDraftInput = z.infer<typeof updateInvoiceDraftSchema>;
 export type UpdateSentInvoiceDueDateInput = z.infer<
   typeof updateSentInvoiceDueDateSchema
+>;
+export type UpdateInvoiceNonFinancialInput = z.infer<
+  typeof updateInvoiceNonFinancialSchema
 >;
 export type InvoiceListFilterInput = z.infer<typeof invoiceListFilterSchema>;
 export type InvoicePersistedStatus = z.infer<typeof persistedInvoiceStatusSchema>;

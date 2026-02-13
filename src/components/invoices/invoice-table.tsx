@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Eye, MoreHorizontal } from "lucide-react";
+import { Download, Eye, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -82,6 +82,12 @@ export function InvoiceTable({ invoices }: InvoiceTableProps) {
                         <Eye className="mr-2 h-4 w-4" />
                         View Details
                       </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <a href={`/invoices/${invoice.id}/pdf`} target="_blank" rel="noreferrer">
+                        <Download className="mr-2 h-4 w-4" />
+                        Download PDF
+                      </a>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

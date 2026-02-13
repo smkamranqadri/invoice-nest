@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  boolean,
   date,
   index,
   integer,
@@ -9,7 +10,7 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { customer } from "./customer";
-import { organization } from "./auth";
+import { organization, user } from "./auth";
 
 export const invoice = pgTable(
   "invoice",
@@ -37,6 +38,9 @@ export const invoice = pgTable(
     taxRateHundredths: integer("tax_rate_hundredths").notNull().default(0),
     taxCents: integer("tax_cents").notNull().default(0),
     totalCents: integer("total_cents").notNull().default(0),
+    amountPaidCents: integer("amount_paid_cents").notNull().default(0),
+    amountDueCents: integer("amount_due_cents").notNull().default(0),
+    hasPaymentHistory: boolean("has_payment_history").notNull().default(false),
     sentAt: timestamp("sent_at"),
     voidedAt: timestamp("voided_at"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -113,6 +117,74 @@ export const invoiceSequence = pgTable(
   (table) => [index("invoiceSequence_currentValue_idx").on(table.currentValue)],
 );
 
+export const invoicePayment = pgTable(
+  "invoice_payment",
+  {
+    id: text("id").primaryKey(),
+    organizationId: text("organization_id")
+      .notNull()
+      .references(() => organization.id, { onDelete: "cascade" }),
+    invoiceId: text("invoice_id")
+      .notNull()
+      .references(() => invoice.id, { onDelete: "cascade" }),
+    amountCents: integer("amount_cents").notNull(),
+    paymentDate: date("payment_date", { mode: "string" }).notNull(),
+    method: text("method").notNull(),
+    methodDetail: text("method_detail"),
+    notes: text("notes"),
+    createdByUserId: text("created_by_user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "restrict" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("invoicePayment_invoiceId_idx").on(table.invoiceId),
+    index("invoicePayment_organizationId_invoiceId_idx").on(
+      table.organizationId,
+      table.invoiceId,
+    ),
+    index("invoicePayment_organizationId_paymentDate_idx").on(
+      table.organizationId,
+      table.paymentDate,
+    ),
+    index("invoicePayment_createdByUserId_idx").on(table.createdByUserId),
+  ],
+);
+
+export const invoicePaymentAudit = pgTable(
+  "invoice_payment_audit",
+  {
+    id: text("id").primaryKey(),
+    organizationId: text("organization_id")
+      .notNull()
+      .references(() => organization.id, { onDelete: "cascade" }),
+    invoiceId: text("invoice_id")
+      .notNull()
+      .references(() => invoice.id, { onDelete: "cascade" }),
+    paymentId: text("payment_id").notNull(),
+    action: text("action").notNull(),
+    reason: text("reason").notNull(),
+    beforeStateJson: text("before_state_json"),
+    afterStateJson: text("after_state_json"),
+    actorUserId: text("actor_user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "restrict" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("invoicePaymentAudit_organizationId_invoiceId_idx").on(
+      table.organizationId,
+      table.invoiceId,
+    ),
+    index("invoicePaymentAudit_paymentId_idx").on(table.paymentId),
+    index("invoicePaymentAudit_actorUserId_idx").on(table.actorUserId),
+  ],
+);
+
 export const invoiceRelations = relations(invoice, ({ one, many }) => ({
   organization: one(organization, {
     fields: [invoice.organizationId],
@@ -123,6 +195,8 @@ export const invoiceRelations = relations(invoice, ({ one, many }) => ({
     references: [customer.id],
   }),
   lineItems: many(invoiceLineItem),
+  payments: many(invoicePayment),
+  paymentAudits: many(invoicePaymentAudit),
 }));
 
 export const invoiceLineItemRelations = relations(
@@ -145,3 +219,36 @@ export const invoiceSequenceRelations = relations(invoiceSequence, ({ one }) => 
     references: [organization.id],
   }),
 }));
+
+export const invoicePaymentRelations = relations(invoicePayment, ({ one }) => ({
+  organization: one(organization, {
+    fields: [invoicePayment.organizationId],
+    references: [organization.id],
+  }),
+  invoice: one(invoice, {
+    fields: [invoicePayment.invoiceId],
+    references: [invoice.id],
+  }),
+  createdByUser: one(user, {
+    fields: [invoicePayment.createdByUserId],
+    references: [user.id],
+  }),
+}));
+
+export const invoicePaymentAuditRelations = relations(
+  invoicePaymentAudit,
+  ({ one }) => ({
+    organization: one(organization, {
+      fields: [invoicePaymentAudit.organizationId],
+      references: [organization.id],
+    }),
+    invoice: one(invoice, {
+      fields: [invoicePaymentAudit.invoiceId],
+      references: [invoice.id],
+    }),
+    actorUser: one(user, {
+      fields: [invoicePaymentAudit.actorUserId],
+      references: [user.id],
+    }),
+  }),
+);

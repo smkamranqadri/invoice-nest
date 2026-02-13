@@ -1,6 +1,13 @@
-import { and, desc, eq, gte, lte, lt, type SQL } from "drizzle-orm";
+import { and, asc, desc, eq, gte, lte, lt, type SQL } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { customer, invoice, invoiceLineItem } from "@/lib/db/schema";
+import {
+  customer,
+  invoice,
+  invoiceLineItem,
+  invoicePayment,
+  invoicePaymentAudit,
+  user,
+} from "@/lib/db/schema";
 import type { InvoiceFilterStatus } from "@/lib/validations/invoice";
 import { getTodayIsoDateInTimeZone } from "@/lib/domain/date";
 import {
@@ -18,6 +25,9 @@ export interface InvoiceListItem {
   displayStatus: InvoiceDisplayStatus;
   dueDate: string;
   totalCents: number;
+  amountPaidCents: number;
+  amountDueCents: number;
+  hasPaymentHistory: boolean;
   updatedAt: Date;
   createdAt: Date;
 }
@@ -52,11 +62,41 @@ export interface InvoiceDetailRecord {
   taxRateHundredths: number;
   taxCents: number;
   totalCents: number;
+  amountPaidCents: number;
+  amountDueCents: number;
+  hasPaymentHistory: boolean;
   sentAt: Date | null;
   voidedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
   lineItems: InvoiceDetailLineItem[];
+  payments: InvoicePaymentRecord[];
+  paymentAudits: InvoicePaymentAuditRecord[];
+}
+
+export interface InvoicePaymentRecord {
+  id: string;
+  amountCents: number;
+  paymentDate: string;
+  method: string;
+  methodDetail: string | null;
+  notes: string | null;
+  createdByUserId: string;
+  createdByUserName: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface InvoicePaymentAuditRecord {
+  id: string;
+  paymentId: string;
+  action: "create" | "update" | "delete";
+  reason: string;
+  beforeStateJson: string | null;
+  afterStateJson: string | null;
+  actorUserId: string;
+  actorUserName: string | null;
+  createdAt: Date;
 }
 
 export interface InvoiceListOptions {
@@ -105,6 +145,9 @@ export async function getInvoices(
       status: invoice.status,
       dueDate: invoice.dueDate,
       totalCents: invoice.totalCents,
+      amountPaidCents: invoice.amountPaidCents,
+      amountDueCents: invoice.amountDueCents,
+      hasPaymentHistory: invoice.hasPaymentHistory,
       updatedAt: invoice.updatedAt,
       createdAt: invoice.createdAt,
     })
@@ -120,6 +163,8 @@ export async function getInvoices(
       row.status as InvoicePersistedStatus,
       row.dueDate,
       timeZone,
+      row.amountPaidCents,
+      row.amountDueCents,
     ),
   })) satisfies InvoiceListItem[];
 }
@@ -150,6 +195,9 @@ export async function getInvoiceById(
       taxRateHundredths: invoice.taxRateHundredths,
       taxCents: invoice.taxCents,
       totalCents: invoice.totalCents,
+      amountPaidCents: invoice.amountPaidCents,
+      amountDueCents: invoice.amountDueCents,
+      hasPaymentHistory: invoice.hasPaymentHistory,
       sentAt: invoice.sentAt,
       voidedAt: invoice.voidedAt,
       createdAt: invoice.createdAt,
@@ -181,6 +229,51 @@ export async function getInvoiceById(
     )
     .orderBy(invoiceLineItem.position);
 
+  const payments = await db
+    .select({
+      id: invoicePayment.id,
+      amountCents: invoicePayment.amountCents,
+      paymentDate: invoicePayment.paymentDate,
+      method: invoicePayment.method,
+      methodDetail: invoicePayment.methodDetail,
+      notes: invoicePayment.notes,
+      createdByUserId: invoicePayment.createdByUserId,
+      createdByUserName: user.name,
+      createdAt: invoicePayment.createdAt,
+      updatedAt: invoicePayment.updatedAt,
+    })
+    .from(invoicePayment)
+    .leftJoin(user, eq(invoicePayment.createdByUserId, user.id))
+    .where(
+      and(
+        eq(invoicePayment.organizationId, organizationId),
+        eq(invoicePayment.invoiceId, invoiceId),
+      ),
+    )
+    .orderBy(desc(invoicePayment.paymentDate), desc(invoicePayment.createdAt));
+
+  const paymentAudits = await db
+    .select({
+      id: invoicePaymentAudit.id,
+      paymentId: invoicePaymentAudit.paymentId,
+      action: invoicePaymentAudit.action,
+      reason: invoicePaymentAudit.reason,
+      beforeStateJson: invoicePaymentAudit.beforeStateJson,
+      afterStateJson: invoicePaymentAudit.afterStateJson,
+      actorUserId: invoicePaymentAudit.actorUserId,
+      actorUserName: user.name,
+      createdAt: invoicePaymentAudit.createdAt,
+    })
+    .from(invoicePaymentAudit)
+    .leftJoin(user, eq(invoicePaymentAudit.actorUserId, user.id))
+    .where(
+      and(
+        eq(invoicePaymentAudit.organizationId, organizationId),
+        eq(invoicePaymentAudit.invoiceId, invoiceId),
+      ),
+    )
+    .orderBy(desc(invoicePaymentAudit.createdAt), asc(invoicePaymentAudit.id));
+
   return {
     ...row,
     status: row.status as InvoicePersistedStatus,
@@ -188,9 +281,16 @@ export async function getInvoiceById(
       row.status as InvoicePersistedStatus,
       row.dueDate,
       timeZone,
+      row.amountPaidCents,
+      row.amountDueCents,
     ),
     discountType: row.discountType as "none" | "percentage" | "fixed",
     lineItems,
+    payments,
+    paymentAudits: paymentAudits.map((audit) => ({
+      ...audit,
+      action: audit.action as "create" | "update" | "delete",
+    })),
   } satisfies InvoiceDetailRecord;
 }
 
@@ -220,6 +320,8 @@ export async function getCustomerInvoiceSummary(
       status: invoice.status,
       dueDate: invoice.dueDate,
       totalCents: invoice.totalCents,
+      amountPaidCents: invoice.amountPaidCents,
+      amountDueCents: invoice.amountDueCents,
       updatedAt: invoice.updatedAt,
       createdAt: invoice.createdAt,
     })
@@ -236,12 +338,18 @@ export async function getCustomerInvoiceSummary(
       row.status as InvoicePersistedStatus,
       row.dueDate,
       timeZone,
+      row.amountPaidCents,
+      row.amountDueCents,
     ),
   }));
 
   const outstandingBalanceCents = invoices.reduce((sum, current) => {
-    if (current.displayStatus === "sent" || current.displayStatus === "overdue") {
-      return sum + current.totalCents;
+    if (current.status !== "sent") {
+      return sum;
+    }
+
+    if (current.amountDueCents > 0) {
+      return sum + current.amountDueCents;
     }
     return sum;
   }, 0);

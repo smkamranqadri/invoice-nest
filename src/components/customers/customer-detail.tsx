@@ -49,9 +49,16 @@ interface CustomerDetailProps {
   invoices: {
     id: string;
     invoiceNumber: string;
-    displayStatus: "draft" | "sent" | "overdue" | "paid" | "void";
+    displayStatus:
+      | "draft"
+      | "sent"
+      | "partially_paid"
+      | "overdue"
+      | "paid"
+      | "void";
     dueDate: string;
     totalCents: number;
+    amountDueCents: number;
     updatedAt: Date;
   }[];
 }
@@ -232,7 +239,7 @@ export function CustomerDetail({
                   <div className="flex items-center gap-3">
                     <InvoiceStatusBadge status={invoice.displayStatus} />
                     <p className="text-sm font-semibold">
-                      {formatCurrencyFromCents(invoice.totalCents)}
+                      {formatCurrencyFromCents(invoice.amountDueCents)}
                     </p>
                   </div>
                 </Link>

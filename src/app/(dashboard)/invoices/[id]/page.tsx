@@ -46,6 +46,7 @@ export default async function InvoiceDetailPage({
         name: customer.name,
       }))}
       canVoid={activeMember?.role === "owner"}
+      canManagePaymentCorrections={activeMember?.role === "owner"}
     />
   );
 }

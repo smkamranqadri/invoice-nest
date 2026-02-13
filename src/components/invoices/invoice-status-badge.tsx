@@ -18,6 +18,10 @@ export function InvoiceStatusBadge({ status }: InvoiceStatusBadgeProps) {
     return <Badge className="bg-blue-600 text-white">Sent</Badge>;
   }
 
+  if (status === "partially_paid") {
+    return <Badge className="bg-amber-500 text-black">Partially Paid</Badge>;
+  }
+
   if (status === "paid") {
     return <Badge className="bg-emerald-600 text-white">Paid</Badge>;
   }

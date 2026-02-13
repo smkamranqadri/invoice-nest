@@ -8,7 +8,10 @@ export const INVOICE_PERSISTED_STATUSES = [
 ] as const;
 
 export type InvoicePersistedStatus = (typeof INVOICE_PERSISTED_STATUSES)[number];
-export type InvoiceDisplayStatus = InvoicePersistedStatus | "overdue";
+export type InvoiceDisplayStatus =
+  | InvoicePersistedStatus
+  | "overdue"
+  | "partially_paid";
 
 const TRANSITIONS: Record<InvoicePersistedStatus, InvoicePersistedStatus[]> = {
   draft: ["sent", "void"],
@@ -46,6 +49,8 @@ export function deriveInvoiceDisplayStatus(
   status: InvoicePersistedStatus,
   dueDateIso: string,
   timeZone: string,
+  amountPaidCents = 0,
+  amountDueCents = 0,
 ): InvoiceDisplayStatus {
   if (status !== "sent") {
     return status;
@@ -56,6 +61,10 @@ export function deriveInvoiceDisplayStatus(
     return "overdue";
   }
 
+  if (amountPaidCents > 0 && amountDueCents > 0) {
+    return "partially_paid";
+  }
+
   return "sent";
 }
 
@@ -64,5 +73,9 @@ export function canEditInvoiceDraftFields(status: InvoicePersistedStatus): boole
 }
 
 export function canEditInvoiceDueDate(status: InvoicePersistedStatus): boolean {
-  return status === "draft" || status === "sent";
+  return status === "draft" || status === "sent" || status === "paid";
+}
+
+export function canEditInvoiceNonFinancial(status: InvoicePersistedStatus): boolean {
+  return status === "sent" || status === "paid";
 }
