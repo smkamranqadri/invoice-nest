@@ -85,7 +85,6 @@ None yet.
 
 - ~~[Research]: Tailwind CSS v4 + shadcn/ui compatibility needs verification before Phase 1 implementation~~ RESOLVED: Tailwind v4 + shadcn/ui works perfectly (verified in 01-01)
 - ~~[Research]: better-auth organizations plugin API needs hands-on validation during Phase 1 planning~~ RESOLVED: better-auth org plugin schema generated and tables migrated successfully (verified in 01-01)
-- [Phase 4]: Targeted human retest still needed for large-invoice PDF pagination/readability after deterministic chunking fix
 - [Phase 4]: Targeted human retest still needed for sticky draft-edit footer visibility, discount row layout, and long-invoice PDF pagination/readability after latest patch
 
 ### Phase 4 Discovery (2026-02-13)
