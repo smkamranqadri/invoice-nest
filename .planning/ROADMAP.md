@@ -25,12 +25,14 @@ InvoiceNest delivers a self-hosted invoicing workspace for small businesses, bui
   3. Workspace owner can invite members by email, assign owner/member roles, and remove members
   4. Members see only data belonging to their workspace -- no cross-workspace data leakage
   5. Application renders with Radix + Tailwind component library, responsive layout works on desktop and mobile, and all pages share consistent navigation, form, and table patterns
-**Plans**: TBD
+**Plans:** 5 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md -- Project scaffolding: Next.js, PostgreSQL, Drizzle, better-auth, shadcn/ui
+- [ ] 01-02-PLAN.md -- Auth UI: sign-up, sign-in, sign-out, route protection middleware
+- [ ] 01-03-PLAN.md -- Dashboard shell: sidebar, header, responsive layout, user menu
+- [ ] 01-04-PLAN.md -- Workspace creation, dashboard landing, workspace settings
+- [ ] 01-05-PLAN.md -- Member management: invite, accept, roles, removal, permissions
 
 ### Phase 2: Customer Management
 **Goal**: Users can build and maintain their customer directory within their workspace, with full search, filtering, and status management
@@ -119,7 +121,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
-| 1. Auth, Workspaces & UI Foundation | 0/TBD | Not started | - |
+| 1. Auth, Workspaces & UI Foundation | 0/5 | Planned | - |
 | 2. Customer Management | 0/TBD | Not started | - |
 | 3. Invoice Creation | 0/TBD | Not started | - |
 | 4. Payments & PDF Generation | 0/TBD | Not started | - |
