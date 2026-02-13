@@ -18,8 +18,9 @@ export default async function DashboardLayout({
     redirect("/sign-in");
   }
 
+  // If user has no active organization, allow /create-workspace to render without sidebar
   if (!session.session.activeOrganizationId) {
-    redirect("/create-workspace");
+    return <>{children}</>;
   }
 
   // Fetch the active organization details for display
