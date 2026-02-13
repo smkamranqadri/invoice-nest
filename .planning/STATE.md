@@ -77,7 +77,7 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 1 | Change primary color to emerald green | 2026-02-13 | 7decaf0 | [1-change-primary-color-to-emerald-green](./quick/1-change-primary-color-to-emerald-green/) |
 | 2 | Fix accept invitation with sign-in flow | 2026-02-13 | f091366 | [2-fix-accept-invitation-with-sign-in-flow](./quick/2-fix-accept-invitation-with-sign-in-flow/) |
-| 3 | Fix all toast notification colors | 2026-02-13 | 74d53db | [3-fix-all-toast-notification-colors](./quick/3-fix-all-toast-notification-colors/) |
+| 3 | Fix all toast notification colors | 2026-02-13 | acd5e81 | [3-fix-all-toast-notification-colors](./quick/3-fix-all-toast-notification-colors/) |
 
 ## Session Continuity
 
