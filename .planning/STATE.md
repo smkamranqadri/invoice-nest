@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Teams can create invoices, send them to customers, and know exactly who owes what -- without spreadsheets or expensive SaaS tools.
-**Current focus:** Phase 4 - Payments & PDF Generation (Planning Ready)
+**Current focus:** Phase 4 - Payments & PDF Generation (Verification)
 
 ## Current Position
 
-Phase: 3 of 6 (Invoice Creation) -- Verified Complete
-Plan: 3 execution items completed and verified (03-01, 03-02, 03-03)
-Status: Human Verification Passed (Phase 3 complete)
-Last activity: 2026-02-13 -- Finalized Phase 3 verification with user-confirmed manual UAT pass (/gsd:verify-work 3)
+Phase: 4 of 6 (Payments & PDF Generation) -- Verification In Progress
+Plan: Verification artifacts created for implemented Phase 4 scope (no standalone PLAN.md existed)
+Status: Automated checks passed; manual UAT 11/12 passed, UAT-11 targeted re-confirmation pending after fixes
+Last activity: 2026-02-13 -- Applied UAT-11 fixes (deterministic PDF chunking + edit dialog overflow control) during /gsd:verify-work 4
 
-Progress: [███████░░░] 70%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
@@ -71,6 +71,11 @@ Recent decisions affecting current work:
 - [03-02]: Sent invoices are read-only except due date edit; void action is owner-only
 - [03-03]: Overdue is derived from `sent` + past due date in workspace timezone; list defaults to `updatedAt desc`
 - [03-VERIFY]: Manual UAT for Phase 3 passed on 2026-02-13; remaining gaps (focused tests, timezone fallback warning log) are tracked as non-blocking follow-ups
+- [04-DECISION]: Payments are mutable for owners (edit/delete with required reason and audit logging)
+- [04-DECISION]: Members can record payments and download PDFs; payment corrections are owner-only
+- [04-DECISION]: `partially_paid` is a display status (persisted statuses remain `draft/sent/paid/void`)
+- [04-DECISION]: Payment on draft auto-sends invoice before recording payment
+- [04-DECISION]: PDF supports `draft/sent/paid/void` and uses optional logo with text fallback
 
 ### Pending Todos
 
@@ -80,7 +85,39 @@ None yet.
 
 - ~~[Research]: Tailwind CSS v4 + shadcn/ui compatibility needs verification before Phase 1 implementation~~ RESOLVED: Tailwind v4 + shadcn/ui works perfectly (verified in 01-01)
 - ~~[Research]: better-auth organizations plugin API needs hands-on validation during Phase 1 planning~~ RESOLVED: better-auth org plugin schema generated and tables migrated successfully (verified in 01-01)
-- [Research]: @react-pdf/renderer + React 19 compatibility needs prototype during Phase 4 planning
+- [Phase 4]: Targeted human retest still needed for large-invoice PDF pagination/readability after deterministic chunking fix
+
+### Phase 4 Discovery (2026-02-13)
+
+- Discovery file: `.planning/phases/04-payments-pdf-generation/DISCOVERY.md`
+- Confirmed scope: `PAY-01` to `PAY-07`, `PDF-01` to `PDF-05`
+- Carry-over constraints:
+  - Invoice status persists `draft/sent/paid/void`; `overdue` remains derived display state
+  - Sent invoices are read-only except due date edit (Phase 3 decision)
+  - Financial calculations must stay integer-cents server-canonical
+- Proposed defaults captured in discovery doc:
+  - Manual payments only (no online gateway)
+  - Overpayment blocked server-side
+  - Financial fields lock once any payment exists
+  - PDF generated on demand from current invoice data
+- Implemented decision outcomes:
+  - Payments are owner-correctable (edit/delete) with required reason and audit log
+  - Sent/paid invoices allow non-financial edits; financial edits lock after payment history exists
+  - Visible `partially_paid` display state is active
+  - PDF generation supports draft/sent/paid/void
+  - Branding uses optional logo with workspace text fallback
+  - Members can record payments/download PDFs; corrections remain owner-only
+
+### Phase 4 Verification (2026-02-13)
+
+- Verification file: `.planning/phases/04-payments-pdf-generation/VERIFICATION.md`
+- Automated checks: `npm run lint` PASS, `npm run build` PASS, `drizzle-kit generate` PASS, `drizzle-kit migrate` PASS
+- Manual UAT status:
+  - Passed: tests 1-10 and 12
+  - Pending targeted re-confirmation: test 11 (long-invoice PDF pagination/readability and edit-draft modal overflow behavior after fix)
+- Applied fixes during verification:
+  - Deterministic multi-page PDF line-item chunking with repeated headers
+  - Bounded invoice edit dialog with internal scroll for large draft forms
 
 ### Quick Tasks Completed
 
@@ -94,6 +131,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-13
-Stopped at: Completed Phase 3 verification (automated + manual UAT pass); ready to begin Phase 4 planning
-Resume file: .planning/phases/03-invoice-creation/03-VERIFICATION.md
-Next recommended command: /gsd:plan-phase 4
+Stopped at: Phase 4 verification in progress with targeted UAT-11 re-confirmation pending
+Resume file: .planning/phases/04-payments-pdf-generation/VERIFICATION.md
+Next recommended command: /gsd:plan-phase 5 (after confirming targeted UAT-11 retest)
