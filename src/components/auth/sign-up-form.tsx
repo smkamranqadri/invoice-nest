@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -31,6 +31,7 @@ type SignUpValues = z.infer<typeof signUpSchema>;
 
 export function SignUpForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<SignUpValues>({
@@ -56,7 +57,9 @@ export function SignUpForm() {
         return;
       }
 
-      router.push("/dashboard");
+      // Redirect to callbackUrl if provided (e.g., from invitation link)
+      const callbackUrl = searchParams.get("callbackUrl");
+      router.push(callbackUrl || "/dashboard");
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
