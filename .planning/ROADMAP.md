@@ -6,7 +6,7 @@ InvoiceNest delivers a self-hosted invoicing workspace for small businesses, bui
 
 ## Phases
 
-- [ ] **Phase 1: Auth, Workspaces & UI Foundation** - Users can sign up, create workspaces, invite members, and operate within a role-based multi-tenant environment
+- [x] **Phase 1: Auth, Workspaces & UI Foundation** - Users can sign up, create workspaces, invite members, and operate within a role-based multi-tenant environment
 - [ ] **Phase 2: Customer Management** - Users can manage their customer directory with full CRUD, search, filtering, and status tracking
 - [ ] **Phase 3: Invoice Creation** - Users can create, edit, and manage invoices with line items, tax, discounts, and status workflows
 - [ ] **Phase 4: Payments & PDF Generation** - Users can record payments against invoices and generate professional PDF documents
@@ -121,7 +121,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
-| 1. Auth, Workspaces & UI Foundation | 0/5 | Planned | - |
+| 1. Auth, Workspaces & UI Foundation | 5/5 | ✓ Complete | 2026-02-13 |
 | 2. Customer Management | 0/TBD | Not started | - |
 | 3. Invoice Creation | 0/TBD | Not started | - |
 | 4. Payments & PDF Generation | 0/TBD | Not started | - |
