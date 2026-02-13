@@ -1,9 +1,9 @@
 ---
 phase: 04-payments-pdf-generation
-verified: 2026-02-13T20:54:47Z
-status: human_verification_partial
-human_verification_result: pass_with_open_issue
-score: 11/12_manual_scope
+verified: 2026-02-13T21:04:03Z
+status: human_verification_complete
+human_verification_result: pass
+score: 12/12_manual_scope
 automated_checks:
   - check: "npm run lint"
     result: "pass"
@@ -49,15 +49,12 @@ requirements:
     status: "pass"
     note: "PDF includes customer data, line items, tax, discount, totals, due date"
   - id: "PDF-04"
-    status: "pass_with_follow_up"
-    note: "Deterministic line-item page chunking, repeated per-page table sections, and Page X/Y footer markers implemented; targeted human retest still pending confirmation"
+    status: "pass"
+    note: "Deterministic line-item page chunking, repeated per-page table sections, and Page X/Y footer markers verified in targeted retest"
   - id: "PDF-05"
     status: "pass"
     note: "PDF route returns downloadable application/pdf attachment"
 open_issues:
-  - severity: "low"
-    item: "Targeted manual retest for UAT-11 has not been re-confirmed after sticky draft-edit footer, discount row layout stabilization, and visible PDF page-marker updates"
-    follow_up: "Run targeted UAT retest for long invoice PDF pagination + invoice edit modal scroll behavior + discount row layout and confirm pass"
   - severity: "low"
     item: "No focused automated tests yet for payment action invariants and PDF pagination edge cases"
     follow_up: "Add targeted domain/action tests in a hardening pass"
@@ -102,10 +99,10 @@ human_verification:
     expected: "Each download includes complete invoice detail set"
     why_human: "Document quality and completeness are user-facing"
     result: "pass"
-  - test: "Large invoice PDF pagination/readability and edit-draft modal overflow"
-    expected: "Clean line-item pagination and bounded, scrollable edit modal"
+  - test: "Large invoice PDF pagination/readability, sticky edit-draft modal save, and discount row layout"
+    expected: "Clean line-item pagination with page markers, bounded scrollable modal with visible save action, and no discount/tax overlap"
     why_human: "Regression originally discovered in manual UX review"
-    result: "pending_retest_after_fix"
+    result: "pass"
   - test: "Workspace isolation for payment/PDF actions"
     expected: "No cross-workspace access leakage"
     why_human: "Permission boundaries require integration-level validation"
@@ -116,8 +113,8 @@ human_verification:
 
 **Phase goal:** Deliver payment recording (including partials/corrections) and invoice PDF download workflows with workspace isolation and role-aware actions.
 
-**Verified:** 2026-02-13T20:54:47Z  
-**Status:** human_verification_partial (all prior manual checks pass except targeted re-confirmation pending for UAT-11 fix)
+**Verified:** 2026-02-13T21:04:03Z  
+**Status:** human_verification_complete (targeted UAT-11 retest passed and full manual scope is now complete)
 
 ## Scope Basis
 
@@ -140,28 +137,28 @@ human_verification:
 | PDF-01 | PASS | `src/app/(dashboard)/invoices/[id]/pdf/route.ts` |
 | PDF-02 | PASS | `src/lib/pdf/invoice-document.tsx` branding fields/fallback |
 | PDF-03 | PASS | `src/lib/pdf/invoice-document.tsx` full invoice detail rendering |
-| PDF-04 | PASS WITH FOLLOW-UP | `src/lib/pdf/invoice-document.tsx` deterministic chunking; pending final manual confirmation |
+| PDF-04 | PASS | `src/lib/pdf/invoice-document.tsx` deterministic chunking + repeated headers + `Page X of Y` markers verified |
 | PDF-05 | PASS | `src/app/(dashboard)/invoices/[id]/pdf/route.ts` attachment response |
 
-## UAT-11 Fixes Applied In This Verification Cycle
+## UAT-11 Targeted Retest Results
 
-1. **Long PDF pagination quality**
+1. **Long PDF pagination quality: PASS**
    - Implemented deterministic line-item chunking across pages with repeated table headers and explicit per-page line-item ranges.
    - Added fixed page footer markers (`Page X of Y`) on every page for clearly visible multi-page structure.
    - Kept totals/notes on summary section instead of interleaving with line-item pages.
-2. **Invoice edit dialog overflow**
+2. **Invoice edit dialog overflow and save visibility: PASS**
    - Added bounded dialog height + internal scroll container for large draft-edit forms.
    - Added dedicated sticky modal footer submit action to keep save action visible while scrolling.
-3. **Discount/tax row overlap**
+3. **Discount/tax row overlap: PASS**
    - Reworked discount/tax form row to a stable three-column responsive layout.
    - Forced discount select trigger to full-width and added `min-w-0` constraints to prevent overlap.
 
 ## Verification Outcome
 
 - Automated checks: **PASS** (`lint`, `build`, migration generate/apply)
-- Manual UAT prior matrix: **11 pass + 1 pending targeted re-confirmation**
-- Current risk posture: **Low**, with one explicit targeted manual confirmation remaining for UAT-11 post-fix UX validation.
+- Manual UAT matrix: **12/12 pass**
+- Current risk posture: **Low**, with no open blocking verification gaps for Phase 4.
 
 ## Recommended Next Command
 
-- Run targeted manual retest for UAT-11 and then continue with `/gsd:plan-phase 5`.
+- Continue with `/gsd:plan-phase 5`.
