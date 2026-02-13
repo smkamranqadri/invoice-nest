@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 ## Current Position
 
 Phase: 1 of 6 (Auth, Workspaces & UI Foundation)
-Plan: 1 of 5 in current phase
+Plan: 2 of 5 in current phase
 Status: Executing
-Last activity: 2026-02-13 -- Completed 01-01 (Project Scaffold)
+Last activity: 2026-02-13 -- Completed 01-02 (Auth UI)
 
-Progress: [██░░░░░░░░] 20%
+Progress: [████░░░░░░] 40%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 14 min
-- Total execution time: 0.23 hours
+- Total plans completed: 2
+- Average duration: 9 min
+- Total execution time: 0.28 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-auth-workspaces-ui-foundation | 1 | 14 min | 14 min |
+| 01-auth-workspaces-ui-foundation | 2 | 17 min | 9 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (14 min)
-- Trend: baseline
+- Last 5 plans: 01-01 (14 min), 01-02 (3 min)
+- Trend: accelerating
 
 *Updated after each plan completion*
 
@@ -48,6 +48,8 @@ Recent decisions affecting current work:
 - [01-01]: Used sonner instead of deprecated toast component per shadcn/ui guidance
 - [01-01]: Used Zod 4.3.6 (not v3) since @t3-oss/env-nextjs supports it
 - [01-01]: Docker PostgreSQL 16 for local development database
+- [01-02]: Optimistic middleware cookie check (getSessionCookie) for speed; full session validation in server components
+- [01-02]: Generic error message on sign-in failure to avoid revealing which field is wrong
 
 ### Pending Todos
 
@@ -62,5 +64,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-13
-Stopped at: Completed 01-01-PLAN.md (Project Scaffold)
-Resume file: .planning/phases/01-auth-workspaces-ui-foundation/01-01-SUMMARY.md
+Stopped at: Completed 01-02-PLAN.md (Auth UI)
+Resume file: .planning/phases/01-auth-workspaces-ui-foundation/01-02-SUMMARY.md
