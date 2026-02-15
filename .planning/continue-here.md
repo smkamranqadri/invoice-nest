@@ -1,39 +1,37 @@
 ---
-updated: 2026-02-15T11:41:19Z
-status: phase7_evidence_closure_complete
-phase: 07-verification-evidence-closure
+updated: 2026-02-15T12:00:21Z
+status: phase8_hardening_complete
+phase: 08-hardening-tests-observability
 ---
 
 # Continue Here
 
-Phase 7 evidence closure is complete. Host deployment evidence and Phase 1 owner-signoff checks have been accepted and recorded.
+Phase 8 hardening tests and timezone fallback observability are complete. Milestone v1 is now ready for archival flow.
 
 ## What Was Completed
 
-- Phase 7 artifacts created and finalized:
-  - `.planning/phases/07-verification-evidence-closure/07-CONTEXT.md`
-  - `.planning/phases/07-verification-evidence-closure/07-01-PLAN.md`
-  - `.planning/phases/07-verification-evidence-closure/07-02-PLAN.md`
-  - `.planning/phases/07-verification-evidence-closure/07-VERIFICATION.md`
-- Phase 1 verification linkage updated and closed:
-  - `.planning/phases/01-auth-workspaces-ui-foundation/01-VERIFICATION.md`
-- Phase 6 host-access issue closed with addendum:
-  - `.planning/phases/06-docker-deployment/06-VERIFICATION.md`
-- Two-pass owner confirmation recorded for pending audit debt checks:
-  - `AUTH-03`
-  - `UI-02`
-  - `UI-03`
+- Phase 8 context and verification artifacts created:
+  - `.planning/phases/08-hardening-tests-observability/08-CONTEXT.md`
+  - `.planning/phases/08-hardening-tests-observability/08-VERIFICATION.md`
+- Targeted automated hardening suite added and passing:
+  - invoice totals + transition matrix
+  - invoice org-scope read/mutation action checks
+  - payment overpayment create/update + exact-balance settlement
+  - PDF pagination boundary/stress chunking + page marker behavior
+  - timezone fallback warning classification/emission behavior
+- Timezone fallback warning implementation added:
+  - `src/lib/workspace/timezone.ts`
+  - `src/lib/queries/workspace.ts` integration
+- Verification policy satisfied:
+  - two consecutive `npm run test:phase8` passes
+  - `npm run lint` pass
 
 ## Current Working Context
 
-- Active focus: begin Phase 8 hardening planning.
-- Host-level deployment evidence completed for:
-  - override port `3001` health checks (browser + curl)
-  - default host port `3000` health checks (browser + curl)
-  - compose port mapping contract (default + override config)
+- Active focus: close and archive milestone v1.
 
 ## Safe Resume Checklist
 
-1. Run `git status --short` and confirm a clean baseline after this closure commit.
-2. Review `.planning/phases/07-verification-evidence-closure/07-VERIFICATION.md` for final evidence references.
-3. Start Phase 8 context discussion and planning.
+1. Run `git status --short` and confirm the Phase 8 closure commit baseline.
+2. Review `.planning/phases/08-hardening-tests-observability/08-VERIFICATION.md`.
+3. Run `/gsd:complete-milestone v1`.

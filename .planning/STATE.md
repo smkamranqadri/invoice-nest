@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Teams can create invoices, send them to customers, and know exactly who owes what -- without spreadsheets or expensive SaaS tools.
-**Current focus:** Phase 8 Hardening Tests and Observability (next)
+**Current focus:** Milestone closure and archival
 
 ## Current Position
 
-Phase: 7 of 8 (Verification Evidence Closure) -- Completed
-Plan: Phase 7 context + execution plans completed, with closure evidence finalized in verification artifacts
-Status: Phase 7 closed (`human_verification_complete`) after owner 2-pass sign-off and host deployment evidence confirmation
-Last activity: 2026-02-15 -- Finalized Phase 7 verification closure records
-Pause state: Ready to start Phase 8 context/planning
+Phase: 8 of 8 (Hardening Tests & Observability) -- Completed
+Plan: Phase 8 context decisions implemented with targeted test hardening and timezone fallback warning observability
+Status: Phase 8 closed (`human_verification_complete`) after 2 consecutive targeted-suite passes and lint pass
+Last activity: 2026-02-15 -- Completed Phase 8 implementation and verification artifacts
+Pause state: Ready to close milestone v1
 
-Progress: [█████████░] 90%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -168,6 +168,16 @@ None yet.
   - Host deployment checks (`DEP-01`, `DEP-05`) retained as pass with browser + curl evidence
   - Phase 1 and Phase 6 verification linkage updated to reflect closure
 
+### Phase 8 Hardening Verification (2026-02-15)
+
+- Context file: `.planning/phases/08-hardening-tests-observability/08-CONTEXT.md`
+- Verification file: `.planning/phases/08-hardening-tests-observability/08-VERIFICATION.md`
+- Closure highlights:
+  - Focused automated suite added for `INV-06`, `INV-10`, `PAY-03`, `PDF-04`
+  - UTC fallback warning observability implemented with structured payload contract and reason taxonomy
+  - Targeted suite passed twice consecutively (flake policy satisfied)
+  - Lint passed with no issues
+
 ### Quick Tasks Completed
 
 | # | Description | Date | Commit | Directory |
@@ -182,6 +192,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-15
-Stopped at: Phase 7 verification evidence closure completed and synced across Phase 1/6/7 artifacts
+Stopped at: Phase 8 hardening and observability closure completed with verification evidence captured
 Resume file: .planning/continue-here.md
-Next recommended command: /gsd:discuss-phase 8
+Next recommended command: /gsd:complete-milestone v1

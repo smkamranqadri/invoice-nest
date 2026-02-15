@@ -12,8 +12,8 @@ InvoiceNest delivers a self-hosted invoicing workspace for small businesses, bui
 - [x] **Phase 4: Payments & PDF Generation** - Users can record payments against invoices and generate professional PDF documents
 - [x] **Phase 5: Dashboard, Settings & Polish** - Users see a financial overview dashboard and can configure workspace settings, clone invoices, and export data
 - [x] **Phase 6: Docker Deployment** - Application runs via `docker compose up` with persistent data and production-ready configuration
-- [ ] **Phase 7: Verification Evidence Closure** - Close remaining manual verification evidence and operator host-access confirmation gaps from milestone audit
-- [ ] **Phase 8: Hardening Tests & Observability** - Add focused automated coverage and timezone fallback observability for invoice/payment/PDF domains
+- [x] **Phase 7: Verification Evidence Closure** - Close remaining manual verification evidence and operator host-access confirmation gaps from milestone audit
+- [x] **Phase 8: Hardening Tests & Observability** - Add focused automated coverage and timezone fallback observability for invoice/payment/PDF domains
 
 ## Phase Details
 
@@ -161,5 +161,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 4. Payments & PDF Generation | Implemented | ✓ Complete | 2026-02-13 |
 | 5. Dashboard, Settings & Polish | 3/3 | ✓ Complete | 2026-02-15 |
 | 6. Docker Deployment | 0/TBD | ✓ Complete | 2026-02-15 |
-| 7. Verification Evidence Closure | 0/2 | ○ Planned | - |
-| 8. Hardening Tests & Observability | 0/3 | ○ Planned | - |
+| 7. Verification Evidence Closure | Implemented | ✓ Complete | 2026-02-15 |
+| 8. Hardening Tests & Observability | Implemented | ✓ Complete | 2026-02-15 |

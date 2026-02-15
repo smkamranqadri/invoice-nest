@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { parseWorkspaceSettingsMetadata } from "@/lib/workspace/settings";
+import { resolveWorkspaceTimeZone } from "@/lib/workspace/timezone";
 
 export async function getRequiredSession() {
   const session = await auth.api.getSession({
@@ -51,9 +52,5 @@ export async function getWorkspaceSettings(organizationId: string) {
 
 export async function getOrganizationTimeZone(organizationId: string) {
   const workspace = await getWorkspaceSettings(organizationId);
-  if (!workspace) {
-    return "UTC";
-  }
-
-  return workspace.settings.timeZone ?? "UTC";
+  return resolveWorkspaceTimeZone(organizationId, workspace);
 }
