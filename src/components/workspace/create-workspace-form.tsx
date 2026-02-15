@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -50,7 +49,6 @@ function slugify(text: string): string {
 }
 
 export function CreateWorkspaceForm() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
@@ -75,7 +73,8 @@ export function CreateWorkspaceForm() {
   async function onSubmit(values: CreateWorkspaceValues) {
     setIsLoading(true);
     try {
-      const { error } = await authClient.organization.create({
+      const { data: createdOrganization, error } =
+        await authClient.organization.create({
         name: values.name,
         slug: values.slug,
         metadata: {
@@ -89,8 +88,25 @@ export function CreateWorkspaceForm() {
         return;
       }
 
+      let organizationId: string | undefined = createdOrganization?.id;
+
+      // Fallback: locate the created org if SDK response omits id.
+      if (!organizationId) {
+        const orgsResult = await authClient.organization.list();
+        organizationId =
+          orgsResult.data?.find((org) => org.slug === values.slug)?.id ??
+          undefined;
+      }
+
+      if (organizationId) {
+        await authClient.organization.setActive({
+          organizationId,
+        });
+      }
+
       toast.success("Workspace created successfully!");
-      router.push("/dashboard");
+      // Force server layout re-evaluation so sidebar state reflects active org immediately.
+      window.location.assign("/dashboard");
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
