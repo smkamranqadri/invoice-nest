@@ -1,9 +1,10 @@
 ---
 phase: 06-docker-deployment
-verified: 2026-02-15T10:26:01Z
+verified: 2026-02-15T11:31:07Z
 status: human_verification_complete
 human_verification_result: pass
 score: 8/8_manual_scope
+phase7_closure_log: ".planning/phases/07-verification-evidence-closure/07-VERIFICATION.md"
 automated_checks:
   - check: "npm run validate:env"
     result: "pass"
@@ -23,6 +24,21 @@ automated_checks:
   - check: "BETTER_AUTH_SECRET= docker compose config"
     result: "pass"
     notes: "Compose interpolation fails fast when required secret is empty."
+  - check: "APP_PORT=3001 docker compose up --build -d"
+    result: "pass"
+    notes: "Override port startup passed with db healthy, migrate exited 0, app healthy."
+  - check: "curl -sS -D - http://localhost:3001/health"
+    result: "pass"
+    notes: "Host curl returned HTTP 200 with status/database/timestamp JSON keys."
+  - check: "headless Chrome --dump-dom http://localhost:3001/health"
+    result: "pass"
+    notes: "Host browser-level reachability confirmed on override port."
+  - check: "curl -sS -D - http://localhost:3000/health"
+    result: "pass"
+    notes: "Host default-port health probe returned HTTP 200 with required JSON keys."
+  - check: "headless Chrome --dump-dom http://localhost:3000/health"
+    result: "pass"
+    notes: "Host browser-level reachability confirmed on default host listener."
 requirements:
   - id: "DEP-01"
     status: "pass"
@@ -72,17 +88,14 @@ human_verification:
     expected: "manual pg_dump command produces backup artifact"
     why_human: "Validates operator runbook command correctness"
     result: "pass"
-open_issues:
-  - severity: "low"
-    item: "Host-level curl from this sandbox to published app port returned connection errors despite healthy container state"
-    follow_up: "Validate host-browser or host-curl access outside sandbox as final operator confirmation"
+open_issues: []
 ---
 
 # Phase 06: Docker Deployment Verification Report
 
 **Phase goal:** Deliver a Docker Compose deployment contract with deterministic startup, migration safety, env validation, data persistence, and health reporting.
 
-**Verified:** 2026-02-15T10:26:01Z  
+**Verified:** 2026-02-15T11:31:07Z  
 **Status:** human_verification_complete (deployment contract verified in-container + compose-level checks)
 
 ## Verification Evidence Summary
@@ -98,6 +111,19 @@ open_issues:
 - Health contract: app container probe to `http://localhost:3000/health` returned `200`.
 - Runbook backup command produced a SQL dump (`/tmp/invoice_nest_phase6_backup.sql`).
 
+## Phase 7 Host-Level Confirmation Addendum (2026-02-15)
+
+- Previous host-access open issue is closed with linked evidence in:
+  - `.planning/phases/07-verification-evidence-closure/07-VERIFICATION.md`
+- Host-level checks now captured for both browser and curl:
+  - `http://localhost:3001/health` (override-port compose publish): HTTP 200 + required JSON fields
+  - `http://localhost:3000/health` (default host listener): HTTP 200 + required JSON fields
+- Port contract evidence captured from compose config:
+  - default published port `3000`
+  - override published port `3001` when `APP_PORT=3001`
+- Triage note:
+  - A default compose run encountered `bind: address already in use` on host port 3000; conflict was triaged and override-port validation completed successfully.
+
 ## Deferred Scope Confirmed
 
 Deferred items remain out of Phase 6 implementation:
@@ -107,4 +133,4 @@ Deferred items remain out of Phase 6 implementation:
 
 ## Recommended Next Command
 
-`/gsd:complete-milestone`
+`/gsd:execute-phase 7`

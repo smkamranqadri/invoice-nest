@@ -1,45 +1,42 @@
 ---
-updated: 2026-02-15T10:26:01Z
-status: all_phases_complete_ready_for_milestone_closure
-phase: 06-docker-deployment
+updated: 2026-02-15T11:31:07Z
+status: phase7_evidence_closure_in_progress
+phase: 07-verification-evidence-closure
 ---
 
 # Continue Here
 
-All six roadmap phases are complete. Phase 6 deployment verification has passed.
+Phase 7 evidence-closure artifacts are now in place. Host deployment evidence has been captured and linked; remaining work is owner-signoff manual verification for Phase 1 audit debt (`AUTH-03`, `UI-02`, `UI-03`).
 
 ## What Was Completed
 
-- Phase 5 execution commits (task-level + plan summaries):
-  - `f42cfda` docs(05-01): complete workspace settings and tax presets plan
-  - `5678e59` docs(05-02): complete dashboard overview plan
-  - `ba81f00` docs(05-03): complete clone and CSV export plan
-- Phase 5 verification artifacts completed:
-  - `.planning/phases/05-dashboard-settings-polish/05-UAT.md`
-  - `.planning/phases/05-dashboard-settings-polish/05-VERIFICATION.md`
-  - Current status: `human_verification_complete` (manual UAT pass)
-- Phase 6 context, implementation, and verification artifacts completed:
-  - `.planning/phases/06-docker-deployment/06-CONTEXT.md`
+- Phase 7 artifacts created:
+  - `.planning/phases/07-verification-evidence-closure/07-CONTEXT.md`
+  - `.planning/phases/07-verification-evidence-closure/07-01-PLAN.md`
+  - `.planning/phases/07-verification-evidence-closure/07-02-PLAN.md`
+  - `.planning/phases/07-verification-evidence-closure/07-VERIFICATION.md`
+- Phase 1 verification linkage updated:
+  - `.planning/phases/01-auth-workspaces-ui-foundation/01-VERIFICATION.md`
+- Phase 6 host-access issue closed with addendum:
   - `.planning/phases/06-docker-deployment/06-VERIFICATION.md`
-  - `Dockerfile`
-  - `docker-compose.yml`
-  - `docs/docker-deployment.md`
-  - `src/app/health/route.ts`
 
 ## Current Working Context
 
-- Active milestone context: close milestone and archive completion evidence.
-- Newly delivered user-facing capabilities:
-  - `docker compose` startup flow for app + Postgres
-  - Migration gating via dedicated one-shot `migrate` service
-  - Runtime health endpoint at `/health` with DB connectivity status
-  - Deployment runbook for startup, logs, migration recovery, and manual backup/restore
+- Active focus: execute remaining manual owner-signoff matrix for:
+  - `AUTH-03` (normal + incognito session behavior)
+  - `UI-02` (desktop/tablet/mobile responsive behavior)
+  - `UI-03` (visual checklist + reviewer sign-off)
+- Host-level deployment evidence completed for:
+  - override port `3001` health checks (browser + curl)
+  - default host port `3000` health checks (browser + curl)
+  - compose port mapping contract (default + override config)
 
 ## Safe Resume Checklist
 
 1. Run `git status --short`.
 2. Re-open:
-   - `.planning/phases/05-dashboard-settings-polish/05-VERIFICATION.md`
-   - `.planning/phases/05-dashboard-settings-polish/05-0*-SUMMARY.md`
-3. Run milestone closure workflow with: `/gsd:complete-milestone`.
-4. Archive verification artifacts and prepare next milestone definition.
+   - `.planning/phases/07-verification-evidence-closure/07-VERIFICATION.md`
+   - `.planning/phases/01-auth-workspaces-ui-foundation/01-VERIFICATION.md`
+3. Execute remaining manual matrix and apply 2-consecutive-pass policy.
+4. Promote Phase 7 verification to `human_verification_complete` once owner sign-off is recorded.
+5. Continue with Phase 8 hardening work.
