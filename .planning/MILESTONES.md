@@ -4,7 +4,7 @@
 
 **Status:** ✅ Shipped 2026-02-15  
 **Phases:** 1-8  
-**Plans:** 11 summary-tracked plan slices (+ implemented completion for phases 3/4/6/8)  
+**Plans:** 11  
 **Tasks:** 26  
 **Timeline:** 2026-02-13 to 2026-02-15  
 **Git range:** `0cdf2a0` -> `8e34988`  
@@ -28,4 +28,29 @@
 
 ---
 
-Next: run `/gsd:new-milestone` to define v1.1 scope.
+## v2.0: Rebrand & UX Overhaul
+
+**Status:** 🚧 Initialized 2026-02-15 (planning complete, execution not started)  
+**Phases:** 9-15 (planned)  
+**Requirements:** 46 active (`DISC-*`, `BRAND-*`, `MKTG-*`, `SEO-*`, `CONT-*`, `UX-*`, `DS-*`, `A11Y-*`, `QA-*`, `DATA-*`, `OPS-*`)  
+**Timeline:** starting 2026-02-15
+
+### Initialization Outcomes
+
+1. Locked milestone boundary to redesign/repositioning, not new billing capabilities.
+2. Completed research-first initialization artifacts (`STACK`, `FEATURES`, `ARCHITECTURE`, `PITFALLS`, `SUMMARY`).
+3. Created v2.0 requirements with one-to-one phase traceability.
+4. Published roadmap for phases 9 through 15 with explicit success criteria.
+5. Reset project state and next command to phase 9 discussion/planning.
+
+### Active Planning Artifacts
+
+- `.planning/PROJECT.md`
+- `.planning/STATE.md`
+- `.planning/REQUIREMENTS.md`
+- `.planning/ROADMAP.md`
+- `.planning/research/SUMMARY.md`
+
+---
+
+Next: run `/gsd:discuss-phase 9` to begin milestone execution planning.

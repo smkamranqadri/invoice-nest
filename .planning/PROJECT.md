@@ -8,12 +8,23 @@ An open-source, self-hosted invoicing workspace for small businesses to manage c
 
 Teams can create invoices, send them to customers, and know exactly who owes what -- without spreadsheets or expensive SaaS tools.
 
+## Current Milestone: v2.0 Rebrand & UX Overhaul
+
+**Goal:** Deliver a full redesign and market-facing repositioning that improves trust, conversion, usability, and release confidence while preserving shipped v1 billing behavior.
+
+**Target feature groups:**
+- Discovery and information architecture (`DISC-*`)
+- Rebrand and design-system rollout (`BRAND-*`, `DS-*`)
+- Marketing conversion and content system (`MKTG-*`, `CONT-*`)
+- SEO production baseline (`SEO-*`)
+- App UX rework and accessibility (`UX-*`, `A11Y-*`)
+- Validation, analytics, and deployment hardening (`QA-*`, `DATA-*`, `OPS-*`)
+
 ## Current State
 
-- Milestone `v1` shipped on **2026-02-15**.
-- Core product scope is complete across auth/workspaces, customers, invoices, payments/PDF, dashboard/settings, and Docker deployment.
-- Post-audit closure work is complete (verification evidence closure and hardening tests/observability).
-- Milestone archives are stored in `.planning/milestones/`.
+- Milestone `v1` shipped on **2026-02-15** and is archived under `.planning/milestones/`.
+- Core domain behavior (auth/workspaces/customers/invoices/payments/pdf/dashboard/settings/docker) is complete.
+- v2.0 is initialized as a major redesign/rebrand milestone with phase numbering continuing at **Phase 9**.
 
 ## Requirements
 
@@ -32,43 +43,49 @@ Teams can create invoices, send them to customers, and know exactly who owes wha
 
 ### Active
 
-- [ ] Define v1.1 milestone goals and requirement set.
-- [ ] Prioritize roadmap based on first operator/user feedback after v1 shipment.
+- [ ] Finalize v2.0 research artifacts for design/SEO/content/operability.
+- [ ] Lock v2.0 requirements and traceability mapping (`DISC-*` through `OPS-*`).
+- [ ] Execute roadmap phases 9-15 for full redesign and launch gating.
 
-### Out of Scope (unchanged)
+### Out of Scope (v2.0)
 
-- Advanced analytics/custom reporting
-- Automated email reminders/notifications
-- Multi-language/i18n
-- Native mobile apps
-- Third-party accounting/CRM/payment gateway integrations
-- Online payment processing (Stripe/PayPal)
+- New billing capability domains (recurring invoices, payment gateways, accounting modules)
+- Native mobile applications
+- Multi-language/i18n rollout
+- Orchestrator-specific deployment targets beyond Docker Compose
+- Heavy third-party analytics stack that violates privacy-first event policy
 
 ## Context
 
-- **Target users:** freelancers, solo professionals, small service businesses/agencies, small nonprofits, small teams using spreadsheets/manual billing.
-- **Deployment model:** self-hosted Docker Compose.
+- **Target users:** freelancers, solo professionals, small service businesses/agencies, nonprofits, and small teams currently running invoice workflows manually or via SaaS lock-in.
+- **Deployment model:** self-hosted Docker Compose remains baseline.
 - **Tech stack:** Next.js 15, PostgreSQL, Drizzle ORM, better-auth, shadcn/ui, @react-pdf/renderer.
-- **Codebase size snapshot:** ~13k lines TypeScript/TSX under `src/`.
-- **Known non-blocking debt:** none blocking v1 shipment; next milestone priorities should come from usage feedback.
+- **Milestone strategy:** big-bang launch with strict design + quality gates before closure.
+- **Accessibility baseline:** WCAG 2.1 AA.
+- **Analytics posture:** privacy-first, minimal first-party funnel events.
+
+## Constraints
+
+- **Scope:** v2.0 introduces no net-new billing capabilities -- only redesign/repositioning and evidence-quality hardening.
+- **Compatibility:** Existing domain behavior and data contracts must remain stable unless explicitly planned in future milestones.
+- **Deployment:** Docker Compose flow and `/health` operability must remain valid (default and override port checks).
+- **Quality gate:** Visual regression, responsive checks, accessibility checks, and host-level deployment verification required before closure.
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Radix + Tailwind for UI | User preference for composable primitives + utility styling | ✅ Shipped in v1 |
-| Session-based auth over JWT | Simpler self-hosted mental model | ✅ Shipped in v1 |
-| Team workspaces with owner/member roles | Multi-user from day one | ✅ Shipped in v1 |
-| Partial payments support | Real invoicing workflows need it | ✅ Shipped in v1 |
-| PDF generation for invoices | Users need downloadable invoice docs | ✅ Shipped in v1 |
-| Docker-ready as v1 done criterion | Self-host deployment target | ✅ Shipped in v1 |
-| Post-audit hardening phase | Close test/observability debt before milestone close | ✅ Shipped in v1 |
+| Move from incremental release plan to major v2.0 milestone | Scope is full redesign + rebrand across marketing and app surfaces | ✅ Locked |
+| Use research-first gate before requirements | Reduces large-milestone ambiguity and ordering mistakes | ✅ Locked |
+| Keep self-host Docker baseline | Preserves product promise and existing operator workflows | ✅ Locked |
+| Privacy-first analytics event model | Need conversion visibility without heavy tracking footprint | ✅ Locked |
+| Big-bang launch with strict quality gates | Matches timeline choice and risk tolerance for this redesign | ✅ Locked |
 
 ## Next Milestone Goals
 
-1. Define v1.1 theme and success criteria.
-2. Establish new requirements file for v1.1 scope.
-3. Build updated roadmap phases after requirements lock.
+1. Execute Phase 9 to lock IA, pathways, and acceptance criteria.
+2. Build and enforce shared design system in Phase 10 before broad UI rewrites.
+3. Complete roadmap phases 11-15 and close launch evidence gates.
 
 ---
-*Last updated: 2026-02-15 after v1 milestone completion*
+*Last updated: 2026-02-15 after v2.0 milestone initialization*

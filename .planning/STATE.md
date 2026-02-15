@@ -5,15 +5,23 @@
 See: `.planning/PROJECT.md` (updated 2026-02-15)
 
 **Core value:** Teams can create invoices, send them to customers, and know exactly who owes what -- without spreadsheets or expensive SaaS tools.  
-**Current focus:** Define next milestone (`v1.1`)
+**Current focus:** v2.0 milestone planning and phase kickoff (`Phase 9`)
 
 ## Current Position
 
-Milestone: **v1** -- Completed and archived  
-Status: **Shipped**  
-Last activity: 2026-02-15 -- Completed `/gsd:complete-milestone 1` archival workflow
+Milestone: **v2.0 Rebrand & UX Overhaul** -- Initialized  
+Phase: **Not started (planning complete, execution pending)**  
+Status: **Ready to discuss and plan Phase 9**  
+Last activity: 2026-02-15 -- Initialized v2.0 artifacts (research, requirements, roadmap)
 
-Progress: [██████████] 100%
+Progress: [█░░░░░░░░░] 10%
+
+## Active Milestone Snapshot (v2.0)
+
+- Planned phases: 9 through 15
+- Total active requirements: 46
+- Research mode: enabled and completed for milestone initialization
+- Launch model: big-bang with explicit QA/A11Y/OPS evidence gates
 
 ## Milestone Archives
 
@@ -22,22 +30,15 @@ Progress: [██████████] 100%
 - `.planning/milestones/v1-MILESTONE-AUDIT.md`
 - `.planning/MILESTONES.md`
 
-## v1 Summary Snapshot
-
-- Delivered phases: 1 through 8
-- Delivered plan summaries: 11
-- Delivered tracked tasks: 26
-- Timeline: 2026-02-13 to 2026-02-15
-- Tag target: `v1`
-
 ## Next Actions
 
-1. Run `/gsd:new-milestone` to define v1.1 requirements and roadmap.
-2. Recreate `.planning/REQUIREMENTS.md` for v1.1 scope during new-milestone flow.
+1. Run `/gsd:discuss-phase 9` to lock phase-specific context and constraints.
+2. Run `/gsd:plan-phase 9` to create executable plan artifacts.
+3. Run `/gsd:execute-phase 9` once plan approval is complete.
 
 ## Session Continuity
 
 Last session: 2026-02-15  
-Stopped at: milestone archival complete for v1  
+Stopped at: v2.0 milestone initialized and ready for phase kickoff  
 Resume file: `.planning/continue-here.md`  
-Next recommended command: `/gsd:new-milestone`
+Next recommended command: `/gsd:discuss-phase 9`
