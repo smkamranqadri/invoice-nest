@@ -258,12 +258,12 @@ export function InvoiceForm({
 
         <LineItemsEditor form={form} disabled={form.formState.isSubmitting} />
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:items-start">
           <FormField
             control={form.control}
             name="discountType"
             render={({ field }) => (
-              <FormItem className="min-w-0">
+              <FormItem className="min-w-0 self-start">
                 <FormLabel>Discount Type</FormLabel>
                 <Select
                   value={field.value}
@@ -286,7 +286,7 @@ export function InvoiceForm({
             )}
           />
 
-          <div className="min-w-0">
+          <div className="min-w-0 self-start">
             {watchedValues.discountType === "percentage" ? (
               <FormField
                 control={form.control}
@@ -348,7 +348,7 @@ export function InvoiceForm({
             ) : null}
           </div>
 
-          <FormItem className="min-w-0">
+          <FormItem className="min-w-0 self-start">
             <FormLabel>Tax Preset</FormLabel>
             <Select
               value={
@@ -388,7 +388,7 @@ export function InvoiceForm({
             control={form.control}
             name="taxRate"
             render={({ field }) => (
-              <FormItem className="min-w-0">
+              <FormItem className="min-w-0 self-start">
                 <FormLabel>Tax %</FormLabel>
                 <FormControl>
                   <Input
