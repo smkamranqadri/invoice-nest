@@ -1,0 +1,10 @@
+.git
+.next
+.planning
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+.env*
+!.env.example

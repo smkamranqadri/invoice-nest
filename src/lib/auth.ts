@@ -3,6 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 import { db } from "@/lib/db";
+import { env } from "@/lib/env";
 import * as schema from "@/lib/db/schema";
 
 export const auth = betterAuth({
@@ -27,7 +28,7 @@ export const auth = betterAuth({
       invitationExpiresIn: 48 * 60 * 60, // 48 hours
       async sendInvitationEmail(data) {
         // For v1: log invitation link, implement email in v2
-        const inviteLink = `${process.env.BETTER_AUTH_URL}/accept-invitation/${data.id}`;
+        const inviteLink = `${env.BETTER_AUTH_URL}/accept-invitation/${data.id}`;
         console.log(`Invitation for ${data.email}: ${inviteLink}`);
       },
     }),

@@ -11,7 +11,7 @@ InvoiceNest delivers a self-hosted invoicing workspace for small businesses, bui
 - [x] **Phase 3: Invoice Creation** - Users can create, edit, and manage invoices with line items, tax, discounts, and status workflows
 - [x] **Phase 4: Payments & PDF Generation** - Users can record payments against invoices and generate professional PDF documents
 - [x] **Phase 5: Dashboard, Settings & Polish** - Users see a financial overview dashboard and can configure workspace settings, clone invoices, and export data
-- [ ] **Phase 6: Docker Deployment** - Application runs via `docker compose up` with persistent data and production-ready configuration
+- [x] **Phase 6: Docker Deployment** - Application runs via `docker compose up` with persistent data and production-ready configuration
 
 ## Phase Details
 
@@ -127,4 +127,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Invoice Creation | Implemented | ✓ Complete | 2026-02-13 |
 | 4. Payments & PDF Generation | Implemented | ✓ Complete | 2026-02-13 |
 | 5. Dashboard, Settings & Polish | 3/3 | ✓ Complete | 2026-02-15 |
-| 6. Docker Deployment | 0/TBD | Not started | - |
+| 6. Docker Deployment | 0/TBD | ✓ Complete | 2026-02-15 |

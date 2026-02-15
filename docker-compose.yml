@@ -1,0 +1,64 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-invoicenest}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-invoicenest}
+      POSTGRES_DB: ${POSTGRES_DB:-invoicenest}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-invoicenest} -d ${POSTGRES_DB:-invoicenest}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  migrate:
+    build:
+      context: .
+      target: migrator
+    depends_on:
+      db:
+        condition: service_healthy
+    environment: &app_env
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-invoicenest}:${POSTGRES_PASSWORD:-invoicenest}@db:5432/${POSTGRES_DB:-invoicenest}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET is required}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+    restart: "no"
+
+  app:
+    build:
+      context: .
+      target: runner
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment: *app_env
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://localhost:3000/health').then((r)=>process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+
+volumes:
+  postgres_data:
+    name: invoice_nest_postgres_data

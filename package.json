@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "npm run validate:env && next start",
+    "lint": "eslint",
+    "validate:env": "node scripts/validate-env.mjs",
+    "db:migrate": "npm run validate:env && drizzle-kit migrate"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

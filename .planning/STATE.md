@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Teams can create invoices, send them to customers, and know exactly who owes what -- without spreadsheets or expensive SaaS tools.
-**Current focus:** Phase 6 - Docker Deployment Planning (Phase 5 Verified)
+**Current focus:** Milestone Closure (All 6 Phases Complete)
 
 ## Current Position
 
-Phase: 5 of 6 (Dashboard, Settings & Polish) -- Verified Complete
-Plan: 05-01, 05-02, and 05-03 executed with summaries and atomic task commits; manual UAT 4/4 passed
-Status: Automated checks pass (`npm run lint`, `npm run build`); manual verification complete via `05-UAT.md` and `05-VERIFICATION.md`
-Last activity: 2026-02-15 -- Completed `/gsd:verify-work 5` with all manual tests passing
-Pause state: Ready to start Phase 6 planning
+Phase: 6 of 6 (Docker Deployment) -- Verified Complete
+Plan: Phase 6 deployment contract implemented and verified (`06-CONTEXT.md`, `06-VERIFICATION.md`)
+Status: Docker compose startup flow, migration gating, env validation, persistence checks, and health endpoint verification passed
+Last activity: 2026-02-15 -- Completed Phase 6 verification with deployment smoke checks
+Pause state: Ready for milestone completion workflow
 
-Progress: [██████████] 98%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -147,6 +147,16 @@ None yet.
 - Manual test results: 4 passed, 0 issues, 0 skipped
 - Verification report updated to `human_verification_complete` with `human_verification_result: pass`
 
+### Phase 6 Verification (2026-02-15)
+
+- Context file: `.planning/phases/06-docker-deployment/06-CONTEXT.md`
+- Verification file: `.planning/phases/06-docker-deployment/06-VERIFICATION.md`
+- Verification highlights:
+  - `docker compose up --build -d` startup gating confirmed (`db` healthy -> `migrate` exit 0 -> `app` start)
+  - Fail-fast guards confirmed for missing `BETTER_AUTH_SECRET` and bad migration `DATABASE_URL`
+  - Persistence check passed (`public` table count stable before/after `db` restart)
+  - Health endpoint and compose health checks validated in container network
+
 ### Quick Tasks Completed
 
 | # | Description | Date | Commit | Directory |
@@ -159,6 +169,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-15
-Stopped at: Phase 5 verification complete; ready for Phase 6 planning
+Stopped at: Phase 6 verified complete; all phases closed
 Resume file: .planning/continue-here.md
-Next recommended command: /gsd:plan-phase 6
+Next recommended command: /gsd:complete-milestone
