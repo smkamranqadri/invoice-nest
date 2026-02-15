@@ -2,7 +2,7 @@
 
 ## Overview
 
-InvoiceNest delivers a self-hosted invoicing workspace for small businesses, built as a Next.js 15 monolith with PostgreSQL. The roadmap follows the natural data dependency chain: authentication and workspaces form the foundation, customer management enables invoice creation, invoices enable payments and PDF generation, and the dashboard aggregates everything. Docker deployment seals the application for self-hosting. Six phases take the project from zero to a Docker-ready v1.
+InvoiceNest delivers a self-hosted invoicing workspace for small businesses, built as a Next.js 15 monolith with PostgreSQL. The roadmap follows the natural data dependency chain: authentication and workspaces form the foundation, customer management enables invoice creation, invoices enable payments and PDF generation, and the dashboard aggregates everything. Docker deployment seals the application for self-hosting. The initial six delivery phases are complete, and two post-audit gap-closure phases harden verification evidence and test/observability coverage.
 
 ## Phases
 
@@ -12,6 +12,8 @@ InvoiceNest delivers a self-hosted invoicing workspace for small businesses, bui
 - [x] **Phase 4: Payments & PDF Generation** - Users can record payments against invoices and generate professional PDF documents
 - [x] **Phase 5: Dashboard, Settings & Polish** - Users see a financial overview dashboard and can configure workspace settings, clone invoices, and export data
 - [x] **Phase 6: Docker Deployment** - Application runs via `docker compose up` with persistent data and production-ready configuration
+- [ ] **Phase 7: Verification Evidence Closure** - Close remaining manual verification evidence and operator host-access confirmation gaps from milestone audit
+- [ ] **Phase 8: Hardening Tests & Observability** - Add focused automated coverage and timezone fallback observability for invoice/payment/PDF domains
 
 ## Phase Details
 
@@ -115,10 +117,41 @@ Plans:
 - [ ] 06-01: TBD
 - [ ] 06-02: TBD
 
+### Phase 7: Verification Evidence Closure
+**Goal**: Close post-audit verification evidence debt by completing remaining manual evidence gates and final operator-host deployment checks
+**Depends on**: Phase 6
+**Requirements**: AUTH-03, UI-02, UI-03, UI-04, DEP-01, DEP-05
+**Gap Closure**: Closes milestone audit tech-debt items for phase-1 human-needed verification and phase-6 host-access confirmation evidence
+**Success Criteria** (what must be TRUE):
+  1. Phase 1 verification artifact is updated from `human_needed` to closed manual verification status with explicit results for AUTH-03, UI-02, and UI-03
+  2. UI-04 process evidence is documented in verification artifacts with clear traceable references
+  3. Host-level deployment access checks (outside sandbox) are validated and phase-6 open issue is closed with recorded evidence
+**Plans**: 2 plans
+
+Plans:
+- [ ] 07-01-PLAN.md -- Close phase-1 auth/ui manual verification evidence
+- [ ] 07-02-PLAN.md -- Complete host-level deployment access verification and update phase-6 evidence
+
+### Phase 8: Hardening Tests & Observability
+**Goal**: Reduce non-blocking technical debt by adding targeted automated tests and explicit timezone fallback observability
+**Depends on**: Phase 7
+**Requirements**: INV-06, INV-10, PAY-03, PDF-04
+**Gap Closure**: Closes milestone audit tech-debt items for invoice/payment/pdf hardening tests and timezone fallback warning behavior
+**Success Criteria** (what must be TRUE):
+  1. Targeted automated tests cover invoice totals, transition guards, and organization-scoped invoice actions
+  2. Targeted automated tests cover payment invariants and PDF pagination edge cases
+  3. Workspace timezone fallback to UTC emits an explicit warning log and has verification coverage
+**Plans**: 3 plans
+
+Plans:
+- [ ] 08-01-PLAN.md -- Add focused invoice domain/action hardening tests
+- [ ] 08-02-PLAN.md -- Add payment and PDF pagination edge-case tests
+- [ ] 08-03-PLAN.md -- Implement timezone fallback warning logging and coverage
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
@@ -128,3 +161,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 4. Payments & PDF Generation | Implemented | ✓ Complete | 2026-02-13 |
 | 5. Dashboard, Settings & Polish | 3/3 | ✓ Complete | 2026-02-15 |
 | 6. Docker Deployment | 0/TBD | ✓ Complete | 2026-02-15 |
+| 7. Verification Evidence Closure | 0/2 | ○ Planned | - |
+| 8. Hardening Tests & Observability | 0/3 | ○ Planned | - |

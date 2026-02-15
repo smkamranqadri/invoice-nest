@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Teams can create invoices, send them to customers, and know exactly who owes what -- without spreadsheets or expensive SaaS tools.
-**Current focus:** Milestone Closure (All 6 Phases Complete)
+**Current focus:** Gap Closure Planning (Post-Audit)
 
 ## Current Position
 
-Phase: 6 of 6 (Docker Deployment) -- Verified Complete
-Plan: Phase 6 deployment contract implemented and verified (`06-CONTEXT.md`, `06-VERIFICATION.md`)
-Status: Docker compose startup flow, migration gating, env validation, persistence checks, and health endpoint verification passed
-Last activity: 2026-02-15 -- Completed milestone audit v1 (status: tech_debt)
-Pause state: Ready for milestone completion workflow
+Phase: Gap closure phases added (07-08) -- Planning Pending
+Plan: Phase 7 (`07-verification-evidence-closure`) and Phase 8 (`08-hardening-tests-observability`) inserted from milestone audit debt
+Status: Milestone audit identified non-blocking debt; roadmap extended with targeted closure phases
+Last activity: 2026-02-15 -- Added gap-closure phases 7-8 from milestone audit
+Pause state: Ready to plan Phase 7
 
-Progress: [██████████] 100%
+Progress: [███████░░░] 75%
 
 ## Performance Metrics
 
@@ -46,6 +46,7 @@ Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
 - [Roadmap]: 6-phase structure following data dependency chain (auth -> customers -> invoices -> payments/PDF -> dashboard -> deployment)
+- [Roadmap]: Post-audit gap-closure phases added (7: verification evidence closure, 8: hardening tests and observability)
 - [Roadmap]: UI requirements (UI-01 through UI-05) assigned to Phase 1 where design system is established; subsequent phases maintain standards
 - [Research]: Stack confirmed as Next.js 15, PostgreSQL, Drizzle ORM, better-auth, @react-pdf/renderer, shadcn/ui (Radix + Tailwind)
 - [01-01]: Used sonner instead of deprecated toast component per shadcn/ui guidance
@@ -171,6 +172,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-15
-Stopped at: Milestone v1 audit complete (`.planning/v1-MILESTONE-AUDIT.md`)
+Stopped at: Gap-closure phases created in roadmap (Phase 7 and Phase 8)
 Resume file: .planning/continue-here.md
-Next recommended command: /gsd:complete-milestone v1
+Next recommended command: /gsd:plan-phase 7
