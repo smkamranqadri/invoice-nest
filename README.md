@@ -49,3 +49,12 @@ npm run lint
 npm run build
 npm run db:migrate
 ```
+
+## Contributing
+
+Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). To report a security
+issue, follow [SECURITY.md](SECURITY.md) rather than opening a public issue.
+
+## License
+
+InvoiceNest is released under the [MIT License](LICENSE).
